@@ -7,7 +7,7 @@ CREATE ROLE if not exists'usuario';
 CREATE ROLE if not exists'administrador';
 GRANT 'usuario' TO 'usuario'@'localhost';
 GRANT 'administrador' TO 'administrador'@'localhost';
-
+GRANT ALL PRIVILEGES ON Obligatorio.* TO 'administrador'@'localhost';
 
 CREATE TABLE Proveedores (
     id INT AUTO_INCREMENT PRIMARY KEY,
