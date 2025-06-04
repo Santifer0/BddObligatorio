@@ -1,5 +1,5 @@
-DROP DATABASE if exists CafesMarloy;
-CREATE DATABASE IF NOT EXISTS CafesMarloy;
+DROP DATABASE if exists Obligatorio;
+CREATE DATABASE IF NOT EXISTS Obligatorio;
 USE CafesMarloy;
 CREATE USER if not exists 'usuario'@'localhost' IDENTIFIED BY 'passusuario';
 CREATE USER if not exists'administrador'@'localhost' IDENTIFIED BY 'passadministrador';
