@@ -1,82 +1,110 @@
-USE obligatorio;
-DROP TABLE IF EXISTS mantenimientos;
-DROP TABLE IF EXISTS registro_consumo;
-DROP TABLE IF EXISTS maquinas;
-DROP TABLE IF EXISTS insumos;
-DROP TABLE IF EXISTS proveedores;
-DROP TABLE IF EXISTS clientes;
-DROP TABLE IF EXISTS tecnicos;
-DROP TABLE IF EXISTS login;
--- Tabla de login
-CREATE TABLE login (
-    correo VARCHAR(100) PRIMARY KEY,
-    contraseña VARCHAR(100) NOT NULL,
-    es_administrador BOOLEAN DEFAULT FALSE
-);
+DROP DATABASE if exists CafesMarloy;
+CREATE DATABASE IF NOT EXISTS CafesMarloy;
+USE CafesMarloy;
+CREATE USER if not exists 'usuario'@'localhost' IDENTIFIED BY 'passusuario';
+CREATE USER if not exists'administrador'@'localhost' IDENTIFIED BY 'passadministrador';
+CREATE ROLE if not exists'usuario';
+CREATE ROLE if not exists'administrador';
+GRANT 'usuario' TO 'usuario'@'localhost';
+GRANT 'administrador' TO 'administrador'@'localhost';
 
--- Tabla de proveedores
-CREATE TABLE proveedores (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+CREATE TABLE Proveedores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     contacto VARCHAR(100)
 );
 
--- Tabla de insumos
-CREATE TABLE insumos (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    descripcion TEXT NOT NULL,
-    tipo VARCHAR(50),
-    precio_unitario DECIMAL(10,2) NOT NULL,
-    id_proveedor INT UNSIGNED,
-    FOREIGN KEY (id_proveedor) REFERENCES proveedores(id)
-);
-
--- Tabla de clientes
-CREATE TABLE clientes (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE Empresa (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    direccion TEXT,
     telefono VARCHAR(20),
     correo VARCHAR(100)
 );
+GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.Empresa TO 'usuario'@'localhost';
 
--- Tabla de maquinas
-CREATE TABLE maquinas (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    modelo VARCHAR(100) NOT NULL,
-    id_cliente INT UNSIGNED,
-    ubicacion_cliente TEXT,
-    costo_alquiler_mensual DECIMAL(10,2),
-    FOREIGN KEY (id_cliente) REFERENCES clientes(id)
-);
-
--- Tabla de registro de consumo de insumos
-CREATE TABLE registro_consumo (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    id_maquina INT UNSIGNED,
-    id_insumo INT UNSIGNED,
-    fecha DATE NOT NULL,
-    cantidad_usada DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id_maquina) REFERENCES maquinas(id),
-    FOREIGN KEY (id_insumo) REFERENCES insumos(id)
-);
-
--- Tabla de técnicos
-CREATE TABLE tecnicos (
-    ci VARCHAR(20) PRIMARY KEY,
+CREATE TABLE Locales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    apellido VARCHAR(100) NOT NULL,
+    direccion VARCHAR(200),
+    telefono VARCHAR(20),
+    correo VARCHAR(100)
+);
+GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.locales TO 'usuario'@'localhost';
+
+CREATE TABLE Insumos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    idProveedor INT,
+    FOREIGN KEY (idProveedor) REFERENCES Proveedores(id)
+);
+GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.insumos TO 'usuario'@'localhost';
+
+CREATE TABLE Maquinas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    modelo VARCHAR(100) NOT NULL,
+    idLocal INT,
+    idEmpresa INT,
+    ubicacionLocales VARCHAR(150),
+    costo_alquiler DECIMAL(10,2),
+    FOREIGN KEY (idLocal)   REFERENCES Locales(id),
+    FOREIGN KEY (idEmpresa) REFERENCES Empresa(id)
+);
+
+
+CREATE TABLE Empresa_Local (
+    empresaId INT,
+    localId   INT,
+    PRIMARY KEY (empresaId, localId),
+    FOREIGN KEY (empresaId) REFERENCES Empresa(id),
+    FOREIGN KEY (localId)   REFERENCES Locales(id)
+);
+GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.empresa_local TO 'usuario'@'localhost';
+
+CREATE TABLE Registro_Consumo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_maquina INT,
+    id_insumo  INT,
+    fecha DATE,
+    cantidad INT,
+    FOREIGN KEY (id_maquina) REFERENCES Maquinas(id),
+    FOREIGN KEY (id_insumo)  REFERENCES Insumos(id)
+);
+GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.registro_consumo TO 'usuario'@'localhost';
+
+CREATE TABLE Tecnicos (
+    ci VARCHAR(20) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
     telefono VARCHAR(20)
 );
 
--- Tabla de mantenimientos
-CREATE TABLE mantenimientos (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    id_maquina INT UNSIGNED,
-    ci_tecnico VARCHAR(20),
-    tipo VARCHAR(50) NOT NULL,
-    fecha DATE NOT NULL,
+CREATE TABLE Mantenimientos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_maquina  INT,
+    ci_tecnico  VARCHAR(20),
+    tipo VARCHAR(50),
+    fecha DATETIME,
     observaciones TEXT,
-    FOREIGN KEY (id_maquina) REFERENCES maquinas(id),
-    FOREIGN KEY (ci_tecnico) REFERENCES tecnicos(ci)
+    FOREIGN KEY (id_maquina) REFERENCES Maquinas(id),
+    FOREIGN KEY (ci_tecnico) REFERENCES Tecnicos(ci)
 );
+GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.mantenimientos TO 'usuario'@'localhost' ;
+
+CREATE TABLE Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_publico VARCHAR(100) NOT NULL,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    permisos VARCHAR(100)
+);
+
+CREATE TABLE Usuario_Contrasenia (
+    nombreUsuario VARCHAR(50) PRIMARY KEY,
+    contrasenia   VARCHAR(255) NOT NULL,
+    FOREIGN KEY (nombreUsuario) REFERENCES Usuarios(nombre)
+);
+
+
+SHOW GRANTS FOR 'usuario'@'localhost';
+SHOW GRANTS FOR 'administrador'@'localhost';
