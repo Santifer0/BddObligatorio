@@ -1,6 +1,6 @@
 DROP DATABASE if exists Obligatorio;
 CREATE DATABASE IF NOT EXISTS Obligatorio;
-USE CafesMarloy;
+USE Obligatorio;
 CREATE USER if not exists 'usuario'@'localhost' IDENTIFIED BY 'passusuario';
 CREATE USER if not exists'administrador'@'localhost' IDENTIFIED BY 'passadministrador';
 CREATE ROLE if not exists'usuario';
@@ -21,7 +21,7 @@ CREATE TABLE Empresa (
     telefono VARCHAR(20),
     correo VARCHAR(100)
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.Empresa TO 'usuario'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.Empresa TO 'usuario'@'localhost';
 
 CREATE TABLE Locales (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,7 +30,7 @@ CREATE TABLE Locales (
     telefono VARCHAR(20),
     correo VARCHAR(100)
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.locales TO 'usuario'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.locales TO 'usuario'@'localhost';
 
 CREATE TABLE Insumos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -39,7 +39,7 @@ CREATE TABLE Insumos (
     idProveedor INT,
     FOREIGN KEY (idProveedor) REFERENCES Proveedores(id)
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.insumos TO 'usuario'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.insumos TO 'usuario'@'localhost';
 
 CREATE TABLE Maquinas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -60,7 +60,7 @@ CREATE TABLE Empresa_Local (
     FOREIGN KEY (empresaId) REFERENCES Empresa(id),
     FOREIGN KEY (localId)   REFERENCES Locales(id)
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.empresa_local TO 'usuario'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.empresa_local TO 'usuario'@'localhost';
 
 CREATE TABLE Registro_Consumo (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,7 +71,7 @@ CREATE TABLE Registro_Consumo (
     FOREIGN KEY (id_maquina) REFERENCES Maquinas(id),
     FOREIGN KEY (id_insumo)  REFERENCES Insumos(id)
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.registro_consumo TO 'usuario'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.registro_consumo TO 'usuario'@'localhost';
 
 CREATE TABLE Tecnicos (
     ci VARCHAR(20) PRIMARY KEY,
@@ -90,7 +90,7 @@ CREATE TABLE Mantenimientos (
     FOREIGN KEY (id_maquina) REFERENCES Maquinas(id),
     FOREIGN KEY (ci_tecnico) REFERENCES Tecnicos(ci)
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON CafesMarloy.mantenimientos TO 'usuario'@'localhost' ;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.mantenimientos TO 'usuario'@'localhost' ;
 
 CREATE TABLE Usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
