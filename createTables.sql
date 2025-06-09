@@ -1,5 +1,5 @@
 DROP DATABASE if exists Obligatorio;
-CREATE DATABASE IF NOT EXISTS Obligatorio;
+CREATE DATABASE IF NOT EXISTS Obligatorio DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
 USE Obligatorio;
 CREATE USER if not exists 'usuario'@'localhost' IDENTIFIED BY 'passusuario';
 CREATE USER if not exists'administrador'@'localhost' IDENTIFIED BY 'passadministrador';
