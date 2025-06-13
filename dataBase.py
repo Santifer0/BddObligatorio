@@ -59,10 +59,10 @@ def crearBase():
         if conexion.is_connected():
             conexion.close()
 
-def get_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",
-        database="Obligatorio"
-    )
+def get_connection(privilegiosAdmin):
+    if privilegiosAdmin == True:
+        return connectAdmin()
+    else:
+        return connectUsuario()
+    
+    

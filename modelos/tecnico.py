@@ -1,7 +1,10 @@
 from dataBase import get_connection
 
+
+privilegiosAdmin = True
+
 def obtener_tecnicos():
-    conn = get_connection()
+    conn = get_connection(privilegiosAdmin)
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("""

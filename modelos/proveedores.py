@@ -1,5 +1,7 @@
 from dataBase import get_connection
 
+privilegiosAdmin = True
+
 def obtener_proveedores():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
