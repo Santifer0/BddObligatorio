@@ -96,13 +96,8 @@ CREATE TABLE Usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_publico VARCHAR(100) NOT NULL,
     nombre VARCHAR(50) NOT NULL UNIQUE,
+    contrasenia   CHAR(64) NOT NULL,
     permisos VARCHAR(100)
-);
-
-CREATE TABLE Usuario_Contrasenia (
-    nombreUsuario VARCHAR(50) PRIMARY KEY,
-    contrasenia   VARCHAR(255) NOT NULL,
-    FOREIGN KEY (nombreUsuario) REFERENCES Usuarios(nombre)
 );
 
 
