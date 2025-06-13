@@ -58,3 +58,11 @@ def crearBase():
     finally:
         if conexion.is_connected():
             conexion.close()
+
+def get_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="root",
+        database="Obligatorio"
+    )
