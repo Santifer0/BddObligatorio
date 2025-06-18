@@ -55,9 +55,3 @@ def logout():
     loggedUser = False
     loggedAdmin = False
     print("Sesión cerrada exitosamente.")
-
-
-import dataBase
-
-loggedUser = False
-loggedAdmin = False
