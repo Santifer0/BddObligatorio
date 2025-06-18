@@ -10,12 +10,12 @@ def loggin(username, password):
     conexion = dataBase.connectAdmin()
     cursor = conexion.cursor(dictionary=True)
     try:
-        sqlPass = "SELECT contrasenia FROM login WHERE nombre = %s"
+        sqlPass = "SELECT contrasenia FROM usuarios WHERE nombre = %s"
         cursor.execute(sqlPass, (username,))
         result = cursor.fetchone()
 
         if result and result['contrasenia'] == password:
-            sqlPerm = "SELECT permisos FROM login WHERE nombre = %s"
+            sqlPerm = "SELECT permisos FROM usuarios WHERE nombre = %s"
             cursor.execute(sqlPerm, (username,))
             result = cursor.fetchone()
             if result and result['permisos'] == 1:
