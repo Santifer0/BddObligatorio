@@ -9,22 +9,38 @@ def loggin(username, password):
 
     conexion = dataBase.connectAdmin()
     cursor = conexion.cursor(dictionary=True)
-    try:
-        sqlPass = "SELECT contrasenia FROM usuarios WHERE nombre = %s"
-        cursor.execute(sqlPass, (username,))
-        result = cursor.fetchone()
+    # try:
+    #     sqlPass = "SELECT contrasenia FROM usuarios WHERE nombre = %s"
+    #     cursor.execute(sqlPass, (username,))
+    #     result = cursor.fetchone()
 
-        if result and result['contrasenia'] == password:
-            sqlPerm = "SELECT permisos FROM usuarios WHERE nombre = %s"
-            cursor.execute(sqlPerm, (username,))
-            result = cursor.fetchone()
-            if result and result['permisos'] == 1:
+    #     if result and result['contrasenia'] == password: 
+    #         sqlPerm = "SELECT permisos FROM usuarios WHERE nombre = %s"
+    #         cursor.execute(sqlPerm, (username,))
+    #         result = cursor.fetchone()
+    #         if result and result['permisos'] == 1:
+    #             loggedAdmin = True
+    #         else:
+    #             loggedUser = True
+    #         print("Inicio de sesión exitoso.")
+    #         return True
+    #     else:
+    #         print("Usuario o contraseña incorrectos.")
+    #         return False
+    try:
+        # ya que nesesito compararlo en select porque la contraseña esta hashda
+        sql = "SELECT permisos FROM usuarios WHERE nombre = %s AND contrasenia = SHA2(%s, 256)"
+        cursor.execute(sql, (username, password))
+        result = cursor.fetchone()
+        # si el usuario existe y la contraseña es correcta result no sera vacio
+        if result:
+            if result['permisos'] == 1:
                 loggedAdmin = True
             else:
                 loggedUser = True
             print("Inicio de sesión exitoso.")
             return True
-        else:
+        else:#si el usuario no existe o la contraseña es incorrecta
             print("Usuario o contraseña incorrectos.")
             return False
     except Exception as e:
@@ -39,3 +55,9 @@ def logout():
     loggedUser = False
     loggedAdmin = False
     print("Sesión cerrada exitosamente.")
+
+
+import dataBase
+
+loggedUser = False
+loggedAdmin = False
