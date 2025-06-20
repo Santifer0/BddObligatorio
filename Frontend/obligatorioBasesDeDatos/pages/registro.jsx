@@ -1,24 +1,25 @@
-import React, { useContext,useState } from "react";
+import React, { useContext } from "react";
 import './css/home.css';
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+
 import fondoLogin from '../src/assets/fondo-login.jpg';
 
-const Home = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const [userName] = useState(location.state?.userName || "Usuario Anónimo");
-  const [Permiso] = useState(location.state?.Permiso || false);
-
-  const IngresarGestion = () => {
-    navigate("/Gestion" , { state: { userName, Permiso} });
-  };
-
-  const IngresarRegistro = () => {
+const IngresarGestion = () => {
+    // Aquí podrías validar el login con backend
+    // Si es correcto:
     navigate("/Home");
   };
+
+const IngresarRegistro = () => {
+    // Aquí podrías validar el login con backend
+    // Si es correcto:
+    navigate("/Home");
+  };
+
+
+const Registro = () => {
 
   return (
     <div
@@ -36,12 +37,12 @@ const Home = () => {
       }}
     >
       <div className="modal">
-        <h2>¡Bienvenido {userName}!</h2>
-        <button onClick={IngresarGestion}>
+        <h2>Registro</h2>
+        <button className="button" onClick={IngresarGestion}>
           Gestion
         </button>
-        <br />
-        <button onClick={IngresarRegistro}>
+        <br></br>
+        <button className="button" onClick={IngresarRegistro}>
           Registros
         </button>
       </div>
@@ -49,4 +50,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Registro;
