@@ -55,3 +55,4 @@ def modificar_maquina(id_maquina, modelo, id_cliente, direccion_cliente, costo_a
     finally:
         cursor.close()
         conn.close()
+    

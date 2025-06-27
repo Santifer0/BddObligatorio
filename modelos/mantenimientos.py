@@ -21,6 +21,8 @@ def obtener_mantenimientos():
 def agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones):
     if login.isLogged() == -1:
         return ["No loggeado"]
+    if tecnico_ocupado(ci_tecnico, fecha):
+        return ["Tecnico ocupado en esa fecha"]
     conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
@@ -50,6 +52,8 @@ def eliminar_mantenimiento(id_mantenimiento):
 def modificar_mantenimiento(id_mantenimiento, id_maquina, ci_tecnico, tipo, fecha, observaciones):
     if login.isLogged() == -1:
         return ["No loggeado"]
+    if tecnico_ocupado(ci_tecnico, fecha):
+        return ["Tecnico ocupado en esa fecha"]
     conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
@@ -60,6 +64,26 @@ def modificar_mantenimiento(id_mantenimiento, id_maquina, ci_tecnico, tipo, fech
         """
         cursor.execute(sql, (id_maquina, ci_tecnico, tipo, fecha, observaciones, id_mantenimiento))
         conn.commit()
+    finally:
+        cursor.close()
+        conn.close()
+
+def tecnico_ocupado(ci_tecnico, fecha):
+    if login.isLogged() == -1:
+        return ["No loggeado"]
+    conn = dataBase.get_connection(False)
+    cursor = conn.cursor()
+    try:
+        sql = """
+            SELECT COUNT(*) FROM Mantenimientos
+            WHERE ci_tecnico = %s AND fecha = %s
+        """
+        cursor.execute(sql, (ci_tecnico, fecha))
+        count = cursor.fetchall()
+        if count[0] != 0:
+            return True
+        else:
+            return False
     finally:
         cursor.close()
         conn.close()
