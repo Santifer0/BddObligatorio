@@ -97,7 +97,7 @@ CREATE TABLE Usuarios (
     nombre_publico VARCHAR(100) NOT NULL,
     nombre VARCHAR(50) NOT NULL UNIQUE,
     contrasenia   CHAR(64) NOT NULL,
-    permisos BOOLEAN(50) NOT NULL DEFAULT 0,
+    permisos BOOLEAN NOT NULL DEFAULT 0
 );
 
 

@@ -1,8 +1,12 @@
-
 from dataBase import get_connection
 
-def obtener_maquinas():
-    conn = get_connection()
+from .login import loggedAdmin, loggin
+
+
+def obtener_maquinas(usuario, password):
+    if  not loggin(usuario, password):
+        return ["Acceso denegado"]
+    conn = get_connection(loggedAdmin)
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("""
@@ -15,8 +19,10 @@ def obtener_maquinas():
         cursor.close()
         conn.close()
 
-def agregar_maquina(modelo, id_cliente, ubicacion, costo):
-    conn = get_connection()
+def agregar_maquina(modelo, id_cliente, ubicacion, costo, usuario, password):
+    if not loggin(usuario, password):
+        return False
+    conn = get_connection(loggedAdmin)
     cursor = conn.cursor()
     try:
         sql = "INSERT INTO maquinas (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual) VALUES (%s, %s, %s, %s)"
@@ -26,8 +32,10 @@ def agregar_maquina(modelo, id_cliente, ubicacion, costo):
         cursor.close()
         conn.close()
 
-def eliminar_maquina(id_maquina):
-    conn = get_connection()
+def eliminar_maquina(id_maquina, usuario, password):
+    if not loggin(usuario, password):
+        return False
+    conn = get_connection(loggedAdmin)
     cursor = conn.cursor()
     try:
         sql = "DELETE FROM maquinas WHERE id = %s"
@@ -37,8 +45,10 @@ def eliminar_maquina(id_maquina):
         cursor.close()
         conn.close()
 
-def modificar_maquina(id_maquina, modelo, id_cliente, ubicacion, costo):
-    conn = get_connection()
+def modificar_maquina(id_maquina, modelo, id_cliente, ubicacion, costo, usuario, password):
+    if not loggin(usuario, password):
+        return False
+    conn = get_connection(loggedAdmin)
     cursor = conn.cursor()
     try:
         sql = """
