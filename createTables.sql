@@ -99,6 +99,7 @@ CREATE TABLE Usuarios (
     contrasenia   CHAR(64) NOT NULL,
     permisos BOOLEAN NOT NULL DEFAULT 0
 );
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.Usuarios TO 'usuario'@'localhost';
 
 
 SHOW GRANTS FOR 'usuario'@'localhost';

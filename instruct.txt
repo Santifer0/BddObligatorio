@@ -1,0 +1,5 @@
+# Si no está corriendo, ejecuta:
+& "c:/Users/juanm/OneDrive/Documentos/ucu/Base de datos/BddObligatorio/.venv/Scripts/python.exe" app.py
+
+cd "Frontend/obligatorioBasesDeDatos"
+npm run dev
