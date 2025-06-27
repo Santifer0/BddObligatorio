@@ -73,9 +73,9 @@ const Gestion = () => {
                 <div className="modal-content">
 
                     <h3>{modal}</h3>
-                    <button onClick={() => handleModal("Alta")}>Alta</button>
-                    <button onClick={() => handleModal("Modificacion")}>Modificacion</button>
-                    <button onClick={() => handleModal("Baja")}>Baja</button>
+                    <button onClick={() => navigate("/Gestion", { state: { userName, Permiso, modal } })}>Alta</button>
+                    <button onClick={() => navigate("/Gestion", { state: { userName, Permiso, modal } })}>Modificacion</button>
+                    <button onClick={() => navigate("/Gestion", { state: { userName, Permiso, modal } })}>Baja</button>
                     <button className="cerrar" onClick={handleCloseModal}>Cerrar</button>
 
                 </div>
