@@ -52,32 +52,3 @@ def modificar_insumo(id_insumo, nombre, precio, id_proveedor):
         cursor.close()
         conn.close()
 
-def registrar_consumo(id_maquina, id_insumo, fecha, cantidad):
-    if login.isLogged() == -1:
-        return ["No loggeado"]
-    conn = dataBase.get_connection(False)
-    cursor = conn.cursor()
-    try:
-        sql = "INSERT INTO registro_consumo (id_maquina, id_insumo, fecha, cantidad) VALUES (%s, %s, %s, %s)"
-        cursor.execute(sql, (id_maquina, id_insumo, fecha, cantidad))
-        conn.commit()
-    finally:
-        cursor.close()
-        conn.close()
-
-def obtener_consumos():
-    if login.isLogged() == -1:
-        return ["No loggeado"]
-    conn = dataBase.get_connection(False)
-    cursor = conn.cursor(dictionary=True)
-    try:
-        cursor.execute("""
-            SELECT rc.id, rc.id_maquina, m.modelo AS maquina, rc.id_insumo, i.nombre AS insumo, rc.fecha, rc.cantidad
-            FROM registro_consumo rc
-            JOIN maquinas m ON rc.id_maquina = m.id
-            JOIN insumos i ON rc.id_insumo = i.id
-        """)
-        return cursor.fetchall()
-    finally:
-        cursor.close()
-        conn.close()

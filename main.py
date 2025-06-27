@@ -8,6 +8,7 @@ import modelos.clientes as clientes
 import modelos.maquina as maquinas
 import modelos.tecnico as tecnicos
 import modelos.mantenimientos as mantenimientos
+import modelos.consumo as consumo
 
 dataBase.crearBase()
 
@@ -97,3 +98,20 @@ mantenimientos.eliminar_mantenimiento(2)
 print(mantenimientos.obtener_mantenimientos())
 login.logout()
 
+#Test consumo
+print('entre')
+login.loggin("administrador", "passadministrador")
+maquinas.agregar_maquina("modelo1", id_cliente, "direccion1", 100)
+resultado_maquinas = maquinas.obtener_maquinas()
+id_maquina = resultado_maquinas[0]['id']
+
+proveedores.agregar_proveedor("Proveedor1", "Contacto1")
+resultado_proveedores = proveedores.obtener_proveedores()
+id_proveedor = resultado_proveedores[0]['id']
+insumos.agregar_insumo("insumo1", 150.0, id_proveedor)
+resultado_insumos = insumos.obtener_Insumos()
+id_insumo = resultado_insumos[0]['id']
+consumo.registrar_consumo(id_maquina, id_insumo, "2025-06-27", 10)
+consumo.registrar_consumo(id_maquina, id_insumo, "2025-06-28", 20)
+print(consumo.obtener_consumos())
+login.logout()

@@ -49,7 +49,7 @@ def crearBase():
         conexion = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="tupass"
+            password="Santi1702@"
         )
         ejecutarArchivoSQL("createTables.sql", conexion)
 
