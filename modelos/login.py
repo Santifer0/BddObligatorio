@@ -1,6 +1,7 @@
 import dataBase
-
+global loggedUser
 loggedUser = False
+global loggedAdmin
 loggedAdmin = False
 
 def loggin(username, password):
@@ -55,3 +56,13 @@ def logout():
     loggedUser = False
     loggedAdmin = False
     print("Sesión cerrada exitosamente.")
+
+def isLogged():
+    global loggedUser
+    global loggedAdmin
+    if loggedUser:
+        return 1
+    elif loggedAdmin:
+        return 2
+    else:
+        return -1

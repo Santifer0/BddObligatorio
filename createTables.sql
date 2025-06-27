@@ -99,6 +99,8 @@ CREATE TABLE Usuarios (
     contrasenia   CHAR(64) NOT NULL,
     permisos BOOLEAN NOT NULL DEFAULT 0
 );
+INSERT INTO Usuarios (nombre_publico, nombre, contrasenia, permisos) VALUES
+('Administrador', 'administrador', SHA2('passadministrador', 256), TRUE);
 
 
 SHOW GRANTS FOR 'usuario'@'localhost';
