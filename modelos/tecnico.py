@@ -1,62 +1,52 @@
 from dataBase import get_connection
+import modelos.login as login
 
-from .login import loggedAdmin, loggin
-loggedAdmin = True
-
-def obtener_tecnicos(usuario, password):
-    if not loggin(usuario, password):
+def obtener_tecnicos():
+    if login.isLogged() != 2:
         return ["Acceso denegado"]
-    conn = get_connection(loggedAdmin)
+    conn = get_connection(True)
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("""
-            SELECT t.ci, t.nombre, t.apellido, t.telefono
-            FROM tecnicos t
-        """)
+        cursor.execute("SELECT * FROM Tecnicos")
         return cursor.fetchall()
     finally:
         cursor.close()
         conn.close()
 
-def agregar_tecnico(ci, nombre, apellido, telefono, usuario, password):
-    if not loggin(usuario, password):
-        return False
-    conn = get_connection(loggedAdmin)
+def agregar_tecnico(ci, nombre, apellido, telefono):
+    if login.isLogged() != 2:
+        return ["Acceso denegado"]
+    conn = get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = "INSERT INTO tecnicos (ci, nombre, apellido, telefono) VALUES (%s, %s, %s, %s)"
+        sql = "INSERT INTO Tecnicos (ci, nombre, apellido, telefono) VALUES (%s, %s, %s, %s)"
         cursor.execute(sql, (ci, nombre, apellido, telefono))
         conn.commit()
     finally:
         cursor.close()
         conn.close()
 
-def eliminar_tecnico(ci, usuario, password):
-    if not loggin(usuario, password):
-        return False
-    conn = get_connection(loggedAdmin)
+def eliminar_tecnico(ci):
+    if login.isLogged() != 2:
+        return ["Acceso denegado"]
+    conn = get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = "DELETE FROM tecnicos WHERE ci = %s"
+        sql = "DELETE FROM Tecnicos WHERE ci = %s"
         cursor.execute(sql, (ci,))
         conn.commit()
     finally:
         cursor.close()
         conn.close()
 
-def modificar_tecnico(ci, telefono, usuario, password):
-    # Modifica solo el teléfono del técnico normalmente no cambian de nombre o apellido
-    if not loggin(usuario, password):
-        return False
-    conn = get_connection(loggedAdmin)
+def modificar_tecnico(ci, nombre, apellido, telefono):
+    if login.isLogged() != 2:
+        return ["Acceso denegado"]
+    conn = get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = """
-            UPDATE tecnicos
-            SET telefono = %s
-            WHERE ci = %s
-        """
-        cursor.execute(sql, (telefono, ci))
+        sql = "UPDATE Tecnicos SET nombre = %s, apellido = %s, telefono = %s WHERE ci = %s"
+        cursor.execute(sql, (nombre, apellido, telefono, ci))
         conn.commit()
     finally:
         cursor.close()

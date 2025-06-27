@@ -1,7 +1,10 @@
-from dataBase import get_connection
+import dataBase
+import modelos.login as login
 
 def obtener_mantenimientos():
-    conn = get_connection()
+    if login.isLogged() == -1:
+        return ["No loggeado"]
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("""
@@ -12,11 +15,13 @@ def obtener_mantenimientos():
         """)
         return cursor.fetchall()
     finally:
-            cursor.close()
-            conn.close()
+        cursor.close()
+        conn.close()
 
 def agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones):
-    conn = get_connection()
+    if login.isLogged() == -1:
+        return ["No loggeado"]
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
         sql = """
@@ -30,7 +35,9 @@ def agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones):
         conn.close()
 
 def eliminar_mantenimiento(id_mantenimiento):
-    conn = get_connection()
+    if login.isLogged() == -1:
+        return ["No loggeado"]
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
         sql = "DELETE FROM Mantenimientos WHERE id = %s"
@@ -40,8 +47,10 @@ def eliminar_mantenimiento(id_mantenimiento):
         cursor.close()
         conn.close()
 
-def modificar_mantenimiento(id, id_maquina, ci_tecnico, tipo, fecha, observaciones):
-    conn = get_connection()
+def modificar_mantenimiento(id_mantenimiento, id_maquina, ci_tecnico, tipo, fecha, observaciones):
+    if login.isLogged() == -1:
+        return ["No loggeado"]
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
         sql = """
@@ -49,7 +58,7 @@ def modificar_mantenimiento(id, id_maquina, ci_tecnico, tipo, fecha, observacion
             SET id_maquina = %s, ci_tecnico = %s, tipo = %s, fecha = %s, observaciones = %s
             WHERE id = %s
         """
-        cursor.execute(sql, (id_maquina, ci_tecnico, tipo, fecha, observaciones, id))
+        cursor.execute(sql, (id_maquina, ci_tecnico, tipo, fecha, observaciones, id_mantenimiento))
         conn.commit()
     finally:
         cursor.close()

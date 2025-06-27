@@ -84,6 +84,8 @@ CREATE TABLE Usuarios (
 );
 INSERT INTO Usuarios (nombre_publico, nombre, contrasenia, permisos) VALUES
 ('Administrador', 'administrador', SHA2('passadministrador', 256), TRUE);
+INSERT INTO Usuarios (nombre_publico, nombre, contrasenia, permisos) VALUES
+('Usuario', 'usuario', SHA2('passusuario', 256), FALSE);
 
 
 SHOW GRANTS FOR 'usuario'@'localhost';

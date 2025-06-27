@@ -1,62 +1,56 @@
-from dataBase import get_connection
+import dataBase
+import modelos.login as login
 
-from .login import loggedAdmin, loggin
 
-
-def obtener_maquinas(usuario, password):
-    if  not loggin(usuario, password):
+def obtener_maquinas():
+    if login.isLogged() != 2:
         return ["Acceso denegado"]
-    conn = get_connection(loggedAdmin)
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("""
-            SELECT m.id, m.modelo, m.ubicacion_cliente, m.costo_alquiler_mensual, c.nombre AS cliente
-            FROM maquinas m
-            JOIN clientes c ON m.id_cliente = c.id
-        """)
+        cursor.execute("SELECT * FROM Maquinas")
         return cursor.fetchall()
     finally:
         cursor.close()
         conn.close()
 
-def agregar_maquina(modelo, id_cliente, ubicacion, costo, usuario, password):
-    if not loggin(usuario, password):
-        return False
-    conn = get_connection(loggedAdmin)
+
+def agregar_maquina(modelo, id_cliente, direccion_cliente, costo_alquiler):
+    if login.isLogged() != 2:
+        return ["Acceso denegado"]
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = "INSERT INTO maquinas (modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual) VALUES (%s, %s, %s, %s)"
-        cursor.execute(sql, (modelo, id_cliente, ubicacion, costo))
+        sql = "INSERT INTO Maquinas (modelo, idCliente, direccionCliente, costo_alquiler) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql, (modelo, id_cliente, direccion_cliente, costo_alquiler))
         conn.commit()
     finally:
         cursor.close()
         conn.close()
 
-def eliminar_maquina(id_maquina, usuario, password):
-    if not loggin(usuario, password):
-        return False
-    conn = get_connection(loggedAdmin)
+
+def eliminar_maquina(id_maquina):
+    if login.isLogged() != 2:
+        return ["Acceso denegado"]
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = "DELETE FROM maquinas WHERE id = %s"
+        sql = "DELETE FROM Maquinas WHERE id = %s"
         cursor.execute(sql, (id_maquina,))
         conn.commit()
     finally:
         cursor.close()
         conn.close()
 
-def modificar_maquina(id_maquina, modelo, id_cliente, ubicacion, costo, usuario, password):
-    if not loggin(usuario, password):
-        return False
-    conn = get_connection(loggedAdmin)
+
+def modificar_maquina(id_maquina, modelo, id_cliente, direccion_cliente, costo_alquiler):
+    if login.isLogged() != 2:
+        return ["Acceso denegado"]
+    conn = dataBase.get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = """
-            UPDATE maquinas
-            SET modelo = %s, id_cliente = %s, ubicacion_cliente = %s, costo_alquiler_mensual = %s
-            WHERE id = %s
-        """
-        cursor.execute(sql, (modelo, id_cliente, ubicacion, costo, id_maquina))
+        sql = "UPDATE Maquinas SET modelo = %s, idCliente = %s, direccionCliente = %s, costo_alquiler = %s WHERE id = %s"
+        cursor.execute(sql, (modelo, id_cliente, direccion_cliente, costo_alquiler, id_maquina))
         conn.commit()
     finally:
         cursor.close()

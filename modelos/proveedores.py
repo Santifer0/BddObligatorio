@@ -15,7 +15,6 @@ def obtener_proveedores():
             conn.close()
 
 def agregar_proveedor(nombre, contacto):
-    
     if login.isLogged() != 2:
         return ["Acceso denegado"]
     else:
@@ -33,7 +32,6 @@ def agregar_proveedor(nombre, contacto):
             conn.close()
 
 def eliminar_proveedor(id_proveedor):
-    print("el")
     if login.isLogged() != 2:
         return ["Acceso denegado"]
     else:
@@ -47,21 +45,7 @@ def eliminar_proveedor(id_proveedor):
             cursor.close()
             conn.close()
 
-def eliminar_proveedor(nombre_proveedor):
-    if login.isLogged() != 2:
-        return ["Acceso denegado"]
-    else:
-        conn = dataBase.get_connection(True)
-        cursor = conn.cursor()
-        try:
-            sql = "DELETE FROM Proveedores WHERE nombre = %s"
-            cursor.execute(sql, (nombre_proveedor,))
-            conn.commit()
-        finally:
-            cursor.close()
-            conn.close()
-
-def modificar_proveedor(nombreViejo, contactoViejo,nombreNuevo, contactoNuevo):
+def modificar_proveedor(id_proveedor, nombre, contacto):
     if login.isLogged() != 2:
         return ["Acceso denegado"]
     else:
@@ -71,9 +55,9 @@ def modificar_proveedor(nombreViejo, contactoViejo,nombreNuevo, contactoNuevo):
             sql = """
                 UPDATE Proveedores
                 SET nombre = %s, contacto = %s
-                WHERE nombre = %s and contacto = %s
+                WHERE id = %s
             """
-            cursor.execute(sql, (nombreNuevo, contactoNuevo, nombreViejo, contactoViejo))
+            cursor.execute(sql, (nombre, contacto, id_proveedor))
             conn.commit()
         finally:
             cursor.close()
