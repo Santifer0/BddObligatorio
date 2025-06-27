@@ -11,7 +11,8 @@ dataBase.crearBase()
 login.loggin("administrador", "passadministrador")
 proveedores.agregar_proveedor("Proveedor1", "Contacto1")
 proveedores.agregar_proveedor("Proveedor2", "Contacto2")
+proveedores.modificar_proveedor("Proveedor2","Contacto2", "Proveedor2 Modificado", "Contacto2 Modificado")
 proveedores.eliminar_proveedor("Proveedor1")
-print(login.isLogged())
 print(proveedores.obtener_proveedores())
+
 

@@ -15,22 +15,15 @@ CREATE TABLE Proveedores (
     contacto VARCHAR(100)
 );
 
-CREATE TABLE Empresa (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    telefono VARCHAR(20),
-    correo VARCHAR(100)
-);
-GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.Empresa TO 'usuario'@'localhost';
-
-CREATE TABLE Locales (
+CREATE TABLE Clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     direccion VARCHAR(200),
     telefono VARCHAR(20),
     correo VARCHAR(100)
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.locales TO 'usuario'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.Clientes TO 'usuario'@'localhost';
+
 
 CREATE TABLE Insumos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,23 +37,13 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.insumos TO 'usuario'@'localh
 CREATE TABLE Maquinas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
-    idLocal INT,
-    idEmpresa INT,
-    ubicacionLocales VARCHAR(150),
+    idCliente INT,
+    direccionCliente VARCHAR(150),
     costo_alquiler DECIMAL(10,2),
-    FOREIGN KEY (idLocal)   REFERENCES Locales(id),
-    FOREIGN KEY (idEmpresa) REFERENCES Empresa(id)
+    FOREIGN KEY (idCliente)   REFERENCES Clientes(id)
 );
 
 
-CREATE TABLE Empresa_Local (
-    empresaId INT,
-    localId   INT,
-    PRIMARY KEY (empresaId, localId),
-    FOREIGN KEY (empresaId) REFERENCES Empresa(id),
-    FOREIGN KEY (localId)   REFERENCES Locales(id)
-);
-GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.empresa_local TO 'usuario'@'localhost';
 
 CREATE TABLE Registro_Consumo (
     id INT AUTO_INCREMENT PRIMARY KEY,

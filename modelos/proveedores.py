@@ -61,7 +61,7 @@ def eliminar_proveedor(nombre_proveedor):
             cursor.close()
             conn.close()
 
-def modificar_proveedor(id_proveedor, nombre, contacto):
+def modificar_proveedor(nombreViejo, contactoViejo,nombreNuevo, contactoNuevo):
     if login.isLogged() != 2:
         return ["Acceso denegado"]
     else:
@@ -71,9 +71,9 @@ def modificar_proveedor(id_proveedor, nombre, contacto):
             sql = """
                 UPDATE Proveedores
                 SET nombre = %s, contacto = %s
-                WHERE id = %s
+                WHERE nombre = %s and contacto = %s
             """
-            cursor.execute(sql, (nombre, contacto, id_proveedor))
+            cursor.execute(sql, (nombreNuevo, contactoNuevo, nombreViejo, contactoViejo))
             conn.commit()
         finally:
             cursor.close()
