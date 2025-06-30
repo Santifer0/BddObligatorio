@@ -37,10 +37,11 @@ def loggin(username, password):
         if result:
             if result['permisos'] == 1:
                 loggedAdmin = True
+                return "admin"
             else:
                 loggedUser = True
             print("Inicio de sesión exitoso.")
-            return True
+            return "user"
         else:#si el usuario no existe o la contraseña es incorrecta
             print("Usuario o contraseña incorrectos.")
             return False

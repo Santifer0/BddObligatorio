@@ -44,7 +44,7 @@ const Gestion = () => {
         >
             <div className="modal">
                 <h2>Gestión</h2>
-                <div style={{ maxHeight: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+                <div>
                     {Permiso &&
                         <button onClick={() => handleOpenModal("Proveedores")}>
                             Proveedores

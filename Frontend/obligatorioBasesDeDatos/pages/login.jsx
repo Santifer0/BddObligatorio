@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import './css/login.css';
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import fondoLogin from '../src/assets/fondo-login.jpg';
 
 const Login = () => {
@@ -10,17 +9,31 @@ const Login = () => {
   const [contraseña, setContraseña] = useState("");
   const navigate = useNavigate();
 
-  const Ingresar = () => {
-    // Aquí podrías validar el login con backend
-    // Si es correcto:
+  const Ingresar = async () => {
     if (userName === "" || contraseña === "") {
       alert("Por favor, complete todos los campos.");
       return;
     }
-    if (userName === "admin") {
-      navigate("/Home", { state: { userName, Permiso: true } });
-    } else {
-      navigate("/Home", { state: { userName, Permiso: false } });
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombre: userName, contrasenia: contraseña }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigate("/Home", { state: { userName: data.userName, Permiso: data.Permiso } });
+      } else {
+        alert("Usuario o contraseña incorrectos.");
+      }
+    } catch (error) {
+      console.error("Error al intentar iniciar sesión:", error);
+      alert("Hubo un problema al intentar iniciar sesión.");
     }
   };
 

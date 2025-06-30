@@ -1,22 +1,55 @@
-USE obligatorio;
+-- Proveedores
+INSERT INTO Proveedores (nombre, contacto) VALUES
+('Nestlé Uruguay', 'contacto@nestle.uy'),
+('Café del Sur', 'cafesur@correo.com');
 
-INSERT INTO login (correo, contraseña, es_administrador) VALUES
-('admin@cafesmarloy.com', 'admin123', TRUE),
-('usuario@cafesmarloy.com', 'usuario123', FALSE);
+-- Empresa (Clientes)
+INSERT INTO Empresa (nombre, telefono, correo) VALUES
+('Supermercado Doña María', '24871122', 'dona@super.com'),
+('Oficinas ITNet', '26223344', 'contacto@itnet.com');
 
-INSERT INTO proveedores (nombre, contacto) VALUES
-('Proveedor Café SA', 'contacto@cafesa.com'),
-('Insumos Gourmet', 'ventas@gourmet.com');
+-- Locales
+INSERT INTO Locales (nombre, direccion, telefono, correo) VALUES
+('Sucursal Centro', '18 de Julio 1234', '24001234', 'centro@super.com'),
+('Sucursal Parque Rodó', 'Br. Artigas 456', '24119988', 'rodosuc@super.com');
 
-INSERT INTO insumos (descripcion, tipo, precio_unitario, id_proveedor) VALUES
-('Café molido', 'Café', 120.00, 1),
-('Leche en polvo', 'Lácteo', 90.00, 2),
-('Canela', 'Especias', 50.00, 2);
+-- Empresa_Local
+INSERT INTO Empresa_Local (empresaId, localId) VALUES
+(1, 1),
+(1, 2),
+(2, 2);
 
-INSERT INTO clientes (nombre, direccion, telefono, correo) VALUES
-('Oficinas Sur S.A.', 'Av. Independencia 123', '098123456', 'cliente1@empresa.com'),
-('Universidad Central', 'Calle Ciencia 45', '099876543', 'admin@uc.edu');
+-- Maquinas
+INSERT INTO Maquinas (modelo, idLocal, idEmpresa, ubicacionLocales, costo_alquiler) VALUES
+('Modelo A100', 1, 1, 'Entrada principal', 1500.00),
+('Modelo C250', 2, 1, 'Sala de espera', 1200.00),
+('Modelo B150', 2, 2, 'Recepción 3er piso', 1300.00);
 
-INSERT INTO tecnicos (ci, nombre, apellido, telefono) VALUES
-('1234567', 'Mario', 'Pérez', '091111111'),
-('7654321', 'Laura', 'Gómez', '092222222');
+-- Tecnicos
+INSERT INTO Tecnicos (ci, nombre, apellido, telefono) VALUES
+('12345678', 'Martín', 'Pérez', '099123456'),
+('98765432', 'Lucía', 'Gómez', '098765432');
+
+-- Mantenimientos
+INSERT INTO Mantenimientos (id_maquina, ci_tecnico, tipo, fecha, observaciones) VALUES
+(1, '12345678', 'Preventivo', '2025-06-10 10:00:00', 'Cambio de filtros'),
+(2, '98765432', 'Asistencia', '2025-06-12 14:30:00', 'Problema en el botón de selección');
+
+-- Insumos
+INSERT INTO Insumos (nombre, precio, idProveedor) VALUES
+('Café Clásico', 1.25, 1),
+('Leche en polvo', 0.95, 2),
+('Chocolate', 1.75, 1),
+('Canela', 0.60, 2);
+
+-- Registro_Consumo
+INSERT INTO Registro_Consumo (id_maquina, id_insumo, fecha, cantidad) VALUES
+(1, 1, '2025-06-01', 20),
+(1, 2, '2025-06-01', 10),
+(2, 1, '2025-06-01', 15),
+(3, 3, '2025-06-02', 5);
+
+-- Usuarios
+INSERT INTO Usuarios (nombre_publico, nombre,contrasenia, permisos) VALUES
+('Administrador Principal', 'admin', SHA2('miContrasenia', 256), true),
+('Usuario Técnico', 'tecnico1', SHA2('miContraseniaSegura', 256),false);
