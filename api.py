@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from modelos.login import loggin
+from modelos.insumo import obtener_Insumos, agregar_insumo, eliminar_insumo, modificar_insumo
+
 
 app = Flask(__name__)  # <- Esta línea crea la app
 CORS(app)  # Permite peticiones desde el frontend
@@ -18,20 +20,25 @@ def login():
     else:
         return jsonify({"status": "error"}), 401
 
-@app.route('/api/alta', methods=['POST'])
+@app.route('/api/insumos/alta', methods=['POST'])
 def alta():
     data = request.json
-    # Aquí iría la lógica para alta de usuario o entidad
-    # Por ejemplo, insertar datos en la base de datos
-    try:
-        # Simulación de inserción en la base de datos
-        nombre = data['nombre']
-        correo = data['correo']
-        # Llamar a la función del modelo correspondiente
-        # Por ejemplo: resultado = modelo.alta(nombre, correo)
-        return jsonify({"status": "ok", "message": "Alta realizada con éxito"})
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+    nombre = data['nombre']
+    precio = data['precio']
+    id_proveedor = data['idProveedor']
+    resultado = agregar_insumo(nombre, precio, id_proveedor)
+    if isinstance(resultado, list) and resultado[0] == "No loggeado":
+        return jsonify({"status": "error", "message": "No loggeado"}), 401
+    return jsonify({"status": "ok", "message": "Insumo agregado correctamente"}), 201
+
+@app.route('/api/insumos/baja', methods=['DELETE'])
+def baja():
+    data = request.json
+    id_insumo = data['id']
+    resultado = eliminar_insumo(id_insumo)
+    if isinstance(resultado, list) and resultado[0] == "No loggeado":
+        return jsonify({"status": "error", "message": "No loggeado"}), 401
+    return jsonify({"status": "ok", "message": "Insumo eliminado correctamente"}), 200
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

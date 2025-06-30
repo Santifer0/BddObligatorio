@@ -35,9 +35,38 @@ const Modificacion = () => {
     const [id_insumo, setIdInsumo] = useState("");
     const [cantidad, setCantidad] = useState("");
 
-    const Confirmar= () => {
-        alert(`alta de ${modal} realizada exitosamente!`);
-        // Aquí podrías agregar la lógica para enviar los datos al backend o realizar alguna acción adicional
+    const Confirmar= async () => {
+        const data = {
+            idInsumo,
+            nombre,
+            precio,
+            idProveedor
+        };
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/api/insumos/modificar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("Modificación realizada exitosamente!");
+                setIdInsumo("");
+                setNombre("");
+                setPrecio("");
+                setIdProveedor("");
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+            alert("Hubo un problema al realizar la modificación.");
+        }
     };
 
     const volverAGestion = () => {

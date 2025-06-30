@@ -14,11 +14,46 @@ const Baja = () => {
 
     const [id, setId] = useState("");
     const [ci, setCi] = useState("");
+    const [idInsumo, setIdInsumo] = useState("");
 
 
-    const Confirmar= () => {
-        alert(`Baja de ${modal} realizada exitosamente!`);
-        // Aquí podrías agregar la lógica para enviar los datos al backend o realizar alguna acción adicional
+    const Confirmar= async () => {
+        let endpoint = "";
+        let body = {};
+
+        if (modal === "Insumos") {
+        } else if (modal === "Técnicos") {
+            endpoint = "http://127.0.0.1:5000/api/tecnicos/baja";
+            body = { ci };
+        } else {
+            endpoint = "http://127.0.0.1:5000/api/insumos/baja";
+            body = { id };
+        }
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === "ok") {
+                    alert("Baja realizada con éxito.");
+                    navigate("/Gestion", { state: { userName, Permiso } });
+                } else {
+                    alert("Error al realizar la baja: " + data.message);
+                }
+            } else {
+                const errorData = await response.json();
+                alert("Error: " + errorData.message);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+            alert("Hubo un problema al realizar la baja.");
+        }
     };
 
     const volverAGestion = () => {
@@ -55,6 +90,13 @@ const Baja = () => {
                     placeholder="CI"
                     value={ci}
                     onChange={e => setCi(e.target.value)}
+                />
+                <input
+                    className="input-modal"
+                    type="text"
+                    placeholder="ID del insumo"
+                    value={idInsumo}
+                    onChange={e => setIdInsumo(e.target.value)}
                 />
                 <br />
                 <button type="button" onClick={Confirmar}>
