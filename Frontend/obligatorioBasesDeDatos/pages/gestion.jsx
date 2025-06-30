@@ -44,38 +44,51 @@ const Gestion = () => {
         >
             <div className="modal">
                 <h2>Gestión</h2>
-                {Permiso &&
-                    <button onClick={() => handleOpenModal("Proveedores")}>
-                        Proveedores
+                <div style={{ maxHeight: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+                    {Permiso &&
+                        <button onClick={() => handleOpenModal("Proveedores")}>
+                            Proveedores
+                        </button>
+                    }
+                    {Permiso &&
+                        <button onClick={() => handleOpenModal("Máquinas")}>
+                            Máquinas
+                        </button>
+                    }
+                    {Permiso &&
+                        <button onClick={() => handleOpenModal("Técnicos")}>
+                            Técnicos
+                        </button>
+                    }
+                    {Permiso &&
+                        <button onClick={() => handleOpenModal("Usuarios")}>
+                            Usuarios
+                        </button>
+                    }
+                    <button onClick={() => handleOpenModal("Empresas")}>
+                        Empresas
                     </button>
-                }
-                {Permiso &&
-                    <button onClick={() => handleOpenModal("Máquinas")}>
-                        Máquinas
+                    <button onClick={() => handleOpenModal("Locales")}>
+                        Locales
                     </button>
-                }
-                {Permiso &&
-                    <button onClick={() => handleOpenModal("Técnicos")}>
-                        Técnicos
+                    <button onClick={() => handleOpenModal("Insumos")}>
+                        Insumos
                     </button>
-                }
-                <button onClick={() => handleOpenModal("Insumos")}>
-                    Insumos
-                </button>
-                <button onClick={() => handleOpenModal("Clientes")}>
-                    Clientes
-                </button>
-                <button onClick={() => handleOpenModal("Mantenimientos")}>
-                    Mantenimientos
-                </button>
+                    <button onClick={() => handleOpenModal("Clientes")}>
+                        Clientes
+                    </button>
+                    <button onClick={() => handleOpenModal("Mantenimientos")}>
+                        Mantenimientos
+                    </button>
+                </div>
             </div>
             {modal && (
                 <div className="modal-content">
 
                     <h3>{modal}</h3>
-                    <button onClick={() => handleModal("Alta")}>Alta</button>
-                    <button onClick={() => handleModal("Modificacion")}>Modificacion</button>
-                    <button onClick={() => handleModal("Baja")}>Baja</button>
+                    <button onClick={() => navigate("/Alta", { state: { userName, Permiso, modal } })}>Alta</button>
+                    <button onClick={() => navigate("/Modificacion", { state: { userName, Permiso, modal } })}>Modificacion</button>
+                    <button onClick={() => navigate("/Baja", { state: { userName, Permiso, modal } })}>Baja</button>
                     <button className="cerrar" onClick={handleCloseModal}>Cerrar</button>
 
                 </div>

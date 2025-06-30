@@ -17,7 +17,7 @@ const Home = () => {
   };
 
   const IngresarRegistro = () => {
-    navigate("/Home");
+    navigate("/Registro" , { state: { userName, Permiso} });
   };
 
   return (
