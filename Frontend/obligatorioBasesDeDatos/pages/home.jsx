@@ -11,13 +11,14 @@ const Home = () => {
 
   const [userName] = useState(location.state?.userName || "Usuario Anónimo");
   const [Permiso] = useState(location.state?.Permiso || false);
+  const [userPassword] = useState(location.state?.userPassword || "");
 
   const IngresarGestion = () => {
-    navigate("/Gestion" , { state: { userName, Permiso} });
+    navigate("/Gestion" , { state: { userName, Permiso, userPassword} });
   };
 
   const IngresarRegistro = () => {
-    navigate("/Registro" , { state: { userName, Permiso} });
+    navigate("/Registro" , { state: { userName, Permiso, userPassword} });
   };
 
   return (

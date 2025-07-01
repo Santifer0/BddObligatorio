@@ -27,7 +27,7 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigate("/Home", { state: { userName: data.userName, Permiso: data.Permiso } });
+        navigate("/Home", { state: { userName: data.userName, Permiso: data.Permiso, userPassword: contraseña } });
       } else {
         alert("Usuario o contraseña incorrectos.");
       }

@@ -9,19 +9,46 @@ const Baja = () => {
     const location = useLocation();
     const userName = location.state?.userName || "Usuario Anónimo";
     const Permiso = location.state?.Permiso || false;
+    const userPassword = location.state?.userPassword || "";
     const modal = location.state?.modal || "Item";
 
 
     const [id, setId] = useState("");
     const [ci, setCi] = useState("");
-    const [idInsumo, setIdInsumo] = useState("");
 
+    const verifyLogin = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:5000/api/verify-login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ nombre: userName, contrasenia: userPassword }),
+            });
+
+            const data = await response.json();
+            return response.ok && data.status === "ok";
+        } catch (error) {
+            console.error("Error al verificar login:", error);
+            return false;
+        }
+    };
 
     const Confirmar= async () => {
+        // Verificar login antes de proceder
+        const loginValid = await verifyLogin();
+        if (!loginValid) {
+            alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+            navigate("/");
+            return;
+        }
         let endpoint = "";
         let body = {};
 
         if (modal === "Insumos") {
+            endpoint = "http://127.0.0.1:5000/api/insumos/baja";
+            body = { id };
         } else if (modal === "Técnicos") {
             endpoint = "http://127.0.0.1:5000/api/tecnicos/baja";
             body = { ci };
@@ -36,13 +63,14 @@ const Baja = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify(body),
             });
             if (response.ok) {
                 const data = await response.json();
                 if (data.status === "ok") {
                     alert("Baja realizada con éxito.");
-                    navigate("/Gestion", { state: { userName, Permiso } });
+                    navigate("/Gestion", { state: { userName, Permiso, userPassword } });
                 } else {
                     alert("Error al realizar la baja: " + data.message);
                 }
@@ -57,7 +85,7 @@ const Baja = () => {
     };
 
     const volverAGestion = () => {
-        navigate("/Gestion", { state: { userName, Permiso } });
+        navigate("/Gestion", { state: { userName, Permiso, userPassword } });
     };
 
     return (
@@ -90,13 +118,6 @@ const Baja = () => {
                     placeholder="CI"
                     value={ci}
                     onChange={e => setCi(e.target.value)}
-                />
-                <input
-                    className="input-modal"
-                    type="text"
-                    placeholder="ID del insumo"
-                    value={idInsumo}
-                    onChange={e => setIdInsumo(e.target.value)}
                 />
                 <br />
                 <button type="button" onClick={Confirmar}>

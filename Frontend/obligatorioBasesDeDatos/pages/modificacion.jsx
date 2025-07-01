@@ -9,6 +9,7 @@ const Modificacion = () => {
     const location = useLocation();
     const userName = location.state?.userName || "Usuario Anónimo";
     const Permiso = location.state?.Permiso || false;
+    const userPassword = location.state?.userPassword || "";
     const modal = location.state?.modal || "Item";
 
     const [id, setId] = useState("");
@@ -35,33 +36,62 @@ const Modificacion = () => {
     const [id_insumo, setIdInsumo] = useState("");
     const [cantidad, setCantidad] = useState("");
 
-    const Confirmar= async () => {
-        const data = {
-            idInsumo,
-            nombre,
-            precio,
-            idProveedor
-        };
-
+    const verifyLogin = async () => {
         try {
-            const response = await fetch("http://127.0.0.1:5000/api/insumos/modificar", {
+            const response = await fetch("http://127.0.0.1:5000/api/verify-login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(data),
+                credentials: "include",
+                body: JSON.stringify({ nombre: userName, contrasenia: userPassword }),
+            });
+
+            const data = await response.json();
+            return response.ok && data.status === "ok";
+        } catch (error) {
+            console.error("Error al verificar login:", error);
+            return false;
+        }
+    };
+
+    const Confirmar= async () => {
+        // Verificar login antes de proceder
+        const loginValid = await verifyLogin();
+        if (!loginValid) {
+            alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+            navigate("/");
+            return;
+        }
+
+        let endpoint = "";
+        let body = {};
+
+        if (modal === "Insumos") {
+            endpoint = "http://127.0.0.1:5000/api/insumos/modificacion";
+            body = { id, nombre, precio, idProveedor };
+        } else if (modal === "Técnicos") {
+            endpoint = "http://127.0.0.1:5000/api/tecnicos/modificacion";
+            body = { ci, nombre, apellido, telefono };
+        }
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(body),
             });
 
             const result = await response.json();
 
             if (response.ok) {
-                alert("Modificación realizada exitosamente!");
-                setIdInsumo("");
-                setNombre("");
-                setPrecio("");
-                setIdProveedor("");
+                alert(`Modificación de ${modal} realizada exitosamente!`);
+                navigate("/Gestion", { state: { userName, Permiso, userPassword } });
             } else {
-                alert(`Error: ${result.message}`);
+                alert(`Error: ${result.message || "Error al realizar la modificación"}`);
             }
         } catch (error) {
             console.error("Error en la solicitud:", error);
@@ -70,7 +100,7 @@ const Modificacion = () => {
     };
 
     const volverAGestion = () => {
-        navigate("/Gestion", { state: { userName, Permiso } });
+        navigate("/Gestion", { state: { userName, Permiso, userPassword } });
     };
 
     return (

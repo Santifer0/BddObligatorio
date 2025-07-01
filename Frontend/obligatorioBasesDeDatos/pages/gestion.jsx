@@ -10,6 +10,7 @@ const Gestion = () => {
     const location = useLocation();
     const userName = location.state?.userName || "Usuario Anónimo";
     const Permiso = location.state?.Permiso || false;
+    const userPassword = location.state?.userPassword || "";
 
     const handleOpenModal = (nombre) => setModal(nombre);
     const handleCloseModal = () => setModal(null);
@@ -86,9 +87,9 @@ const Gestion = () => {
                 <div className="modal-content">
 
                     <h3>{modal}</h3>
-                    <button onClick={() => navigate("/Alta", { state: { userName, Permiso, modal } })}>Alta</button>
-                    <button onClick={() => navigate("/Modificacion", { state: { userName, Permiso, modal } })}>Modificacion</button>
-                    <button onClick={() => navigate("/Baja", { state: { userName, Permiso, modal } })}>Baja</button>
+                    <button onClick={() => navigate("/Alta", { state: { userName, Permiso, userPassword, modal } })}>Alta</button>
+                    <button onClick={() => navigate("/Modificacion", { state: { userName, Permiso, userPassword, modal } })}>Modificacion</button>
+                    <button onClick={() => navigate("/Baja", { state: { userName, Permiso, userPassword, modal } })}>Baja</button>
                     <button className="cerrar" onClick={handleCloseModal}>Cerrar</button>
 
                 </div>

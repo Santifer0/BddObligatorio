@@ -9,6 +9,7 @@ const Alta = () => {
     const location = useLocation();
     const userName = location.state?.userName || "Usuario Anónimo";
     const Permiso = location.state?.Permiso || false;
+    const userPassword = location.state?.userPassword || "";
     const modal = location.state?.modal || "Item";
 
     const [nombre, setNombre] = useState("");
@@ -34,7 +35,33 @@ const Alta = () => {
     const [id_insumo, setIdInsumo] = useState("");
     const [cantidad, setCantidad] = useState("");
 
+    const verifyLogin = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:5000/api/verify-login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ nombre: userName, contrasenia: userPassword }),
+            });
+
+            const data = await response.json();
+            return response.ok && data.status === "ok";
+        } catch (error) {
+            console.error("Error al verificar login:", error);
+            return false;
+        }
+    };
+
     const Confirmar = async () => {
+        // Verificar login antes de proceder
+        const loginValid = await verifyLogin();
+        if (!loginValid) {
+            alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+            navigate("/");
+            return;
+        }
         let endpoint = "";
         let body = {};
 
@@ -76,6 +103,7 @@ const Alta = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify(body),
             });
 
@@ -115,7 +143,7 @@ const Alta = () => {
     };
 
     const volverAGestion = () => {
-        navigate("/Gestion", { state: { userName, Permiso } });
+        navigate("/Gestion", { state: { userName, Permiso, userPassword } });
     };
 
     return (
