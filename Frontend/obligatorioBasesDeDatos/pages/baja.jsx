@@ -1,0 +1,134 @@
+import React, { useState } from "react";
+import './css/alta.css';
+import fondoLogin from '../src/assets/fondo-login.jpg';
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+const Baja = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const userName = location.state?.userName || "Usuario Anónimo";
+    const Permiso = location.state?.Permiso || false;
+    const userPassword = location.state?.userPassword || "";
+    const modal = location.state?.modal || "Item";
+
+
+    const [id, setId] = useState("");
+    const [ci, setCi] = useState("");
+
+    const verifyLogin = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:5000/api/verify-login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ nombre: userName, contrasenia: userPassword }),
+            });
+
+            const data = await response.json();
+            return response.ok && data.status === "ok";
+        } catch (error) {
+            console.error("Error al verificar login:", error);
+            return false;
+        }
+    };
+
+    const Confirmar= async () => {
+        // Verificar login antes de proceder
+        const loginValid = await verifyLogin();
+        if (!loginValid) {
+            alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+            navigate("/");
+            return;
+        }
+        let endpoint = "";
+        let body = {};
+
+        if (modal === "Insumos") {
+            endpoint = "http://127.0.0.1:5000/api/insumos/baja";
+            body = { id };
+        } else if (modal === "Técnicos") {
+            endpoint = "http://127.0.0.1:5000/api/tecnicos/baja";
+            body = { ci };
+        } else {
+            endpoint = "http://127.0.0.1:5000/api/insumos/baja";
+            body = { id };
+        }
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(body),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === "ok") {
+                    alert("Baja realizada con éxito.");
+                    navigate("/Gestion", { state: { userName, Permiso, userPassword } });
+                } else {
+                    alert("Error al realizar la baja: " + data.message);
+                }
+            } else {
+                const errorData = await response.json();
+                alert("Error: " + errorData.message);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+            alert("Hubo un problema al realizar la baja.");
+        }
+    };
+
+    const volverAGestion = () => {
+        navigate("/Gestion", { state: { userName, Permiso, userPassword } });
+    };
+
+    return (
+        <div
+            className="modal-background"
+            style={{
+                backgroundImage: `url(${fondoLogin})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                minHeight: '100vh',
+                minWidth: '100vw',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                zIndex: 1,
+            }}
+        >
+            <div className="modal">
+                <h2>Baja de {modal}</h2>
+                <input
+                    className={`Id${modal == "Técnicos" ? " invisible" : ""}`}
+                    type="text"
+                    placeholder="ID"
+                    value={id}
+                    onChange={e => setId(e.target.value)}
+                />
+                <input
+                    className={`Ci${modal !== "Técnicos" ? " invisible" : ""}`}
+                    type="number"
+                    placeholder="CI"
+                    value={ci}
+                    onChange={e => setCi(e.target.value)}
+                />
+                <br />
+                <button type="button" onClick={Confirmar}>
+                    Confirmar Baja
+                </button>
+                <button type="button" onClick={volverAGestion}>
+                    Volver a Gestión
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default Baja;

@@ -1,26 +1,19 @@
-import React, { useContext } from "react";
-import './css/home.css';
-import { UserContext } from "../context/UserContext";
+import React, { useState } from "react";
+import './css/gestion.css';
+import fondoLogin from '../src/assets/fondo-login.jpg';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-import fondoLogin from '../src/assets/fondo-login.jpg';
-
-const IngresarGestion = () => {
-    // Aquí podrías validar el login con backend
-    // Si es correcto:
-    navigate("/Home");
-  };
-
-const IngresarRegistro = () => {
-    // Aquí podrías validar el login con backend
-    // Si es correcto:
-    navigate("/Home");
-  };
-
-
 const Registro = () => {
+  const [modal, setModal] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userName = location.state?.userName || "Usuario Anónimo";
 
+
+  function handleOpenModal(nombre) {
+    setModal(nombre);
+  }
   return (
     <div
       className="modal-background"
@@ -38,13 +31,22 @@ const Registro = () => {
     >
       <div className="modal">
         <h2>Registro</h2>
-        <button className="button" onClick={IngresarGestion}>
-          Gestion
+        <button onClick={() => handleOpenModal("Insumos")}>
+          consumo de Insumos
         </button>
-        <br></br>
-        <button className="button" onClick={IngresarRegistro}>
-          Registros
+        <button onClick={() => handleOpenModal("Máquinas")}>
+          alquiler mensual de máquinas por cliente
         </button>
+        <button onClick={() => handleOpenModal("Técnicos")}>
+          total a cobrar por cliente
+        </button>
+        <button onClick={() => handleOpenModal("Clientes")}>
+          total de mantenimientos por ci_tecnico
+        </button>
+        <button onClick={() => handleOpenModal("Insumos")}>
+          maquinas por cliente
+        </button>
+
       </div>
     </div>
   );
