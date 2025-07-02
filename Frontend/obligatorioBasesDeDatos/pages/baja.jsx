@@ -52,6 +52,30 @@ const Baja = () => {
         } else if (modal === "Técnicos") {
             endpoint = "http://127.0.0.1:5000/api/tecnicos/baja";
             body = { ci };
+        } else if (modal === "Clientes") {
+            endpoint = "http://127.0.0.1:5000/api/clientes/baja";
+            body = { id };
+        } else if (modal === "Empresas") {
+            endpoint = "http://127.0.0.1:5000/api/empresas/baja";
+            body = { id };
+        } else if (modal === "Locales") {
+            endpoint = "http://127.0.0.1:5000/api/locales/baja";
+            body = { id };
+        } else if (modal === "Proveedores") {
+            endpoint = "http://127.0.0.1:5000/api/proveedores/baja";
+            body = { id };
+        } else if (modal === "Usuarios") {
+            endpoint = "http://127.0.0.1:5000/api/usuarios/baja";
+            body = { id };
+        } else if (modal === "Máquinas") {
+            endpoint = "http://127.0.0.1:5000/api/maquinas/baja";
+            body = { id };
+        } else if (modal === "Mantenimientos") {
+            endpoint = "http://127.0.0.1:5000/api/mantenimientos/baja";
+            body = { id };
+        } else if (modal === "Registro_Consumo") {
+            endpoint = "http://127.0.0.1:5000/api/registro_consumo/baja";
+            body = { id };
         } else {
             endpoint = "http://127.0.0.1:5000/api/insumos/baja";
             body = { id };

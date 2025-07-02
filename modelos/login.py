@@ -41,3 +41,22 @@ def isLogged():
         return 2
     else:
         return -1
+
+def get_user_connection():
+    """
+    Devuelve la conexión adecuada según los permisos del usuario logueado.
+    Si es admin, usa conexión de administrador; si es usuario normal, usa conexión de usuario.
+    """
+    if session.get('logged_admin', False):
+        return dataBase.get_connection(True)  # Conexión de administrador
+    elif session.get('logged_user', False):
+        return dataBase.get_connection(False)  # Conexión de usuario normal
+    else:
+        # Si no hay sesión activa, usar conexión de usuario normal por defecto
+        return dataBase.get_connection(False)
+
+def is_admin():
+    """
+    Verifica si el usuario logueado tiene permisos de administrador.
+    """
+    return session.get('logged_admin', False)

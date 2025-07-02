@@ -72,7 +72,31 @@ const Modificacion = () => {
             body = { id, nombre, precio, idProveedor };
         } else if (modal === "Técnicos") {
             endpoint = "http://127.0.0.1:5000/api/tecnicos/modificacion";
-            body = { ci, nombre, apellido, telefono };
+            body = { ci, telefono };
+        } else if (modal === "Clientes") {
+            endpoint = "http://127.0.0.1:5000/api/clientes/modificacion";
+            body = { id, nombre, direccion, telefono, correo };
+        } else if (modal === "Empresas") {
+            endpoint = "http://127.0.0.1:5000/api/empresas/modificacion";
+            body = { id, nombre, telefono, correo };
+        } else if (modal === "Locales") {
+            endpoint = "http://127.0.0.1:5000/api/locales/modificacion";
+            body = { id, nombre, direccion, telefono, correo };
+        } else if (modal === "Proveedores") {
+            endpoint = "http://127.0.0.1:5000/api/proveedores/modificacion";
+            body = { id, nombre, contacto };
+        } else if (modal === "Usuarios") {
+            endpoint = "http://127.0.0.1:5000/api/usuarios/modificacion";
+            body = { id, nombre_publico, nombre, contrasenia };
+        } else if (modal === "Máquinas") {
+            endpoint = "http://127.0.0.1:5000/api/maquinas/modificacion";
+            body = { id, modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual };
+        } else if (modal === "Mantenimientos") {
+            endpoint = "http://127.0.0.1:5000/api/mantenimientos/modificacion";
+            body = { id, id_maquina, ci_tecnico, tipo, fecha, observaciones };
+        } else if (modal === "Registro_Consumo") {
+            endpoint = "http://127.0.0.1:5000/api/registro_consumo/modificacion";
+            body = { id, id_maquina, id_insumo, fecha, cantidad };
         }
 
         try {
@@ -135,7 +159,7 @@ const Modificacion = () => {
                     onChange={e => setCi(e.target.value)}
                 />
                 <input
-                    className={`nombre${!['Insumos','Clientes','Empresas','Locales','Proveedores','Usuarios'].includes(modal) ? " invisible" : ""}`}
+                    className={`nombre${!['Insumos','Clientes','Proveedores','Usuarios'].includes(modal) ? " invisible" : ""}`}
                     type="text"
                     placeholder="Nombre"
                     value={nombre}
@@ -156,21 +180,21 @@ const Modificacion = () => {
                     onChange={e => setIdProveedor(e.target.value)}
                 />
                 <input
-                    className={`direccion${!['Clientes','Locales'].includes(modal) ? " invisible" : ""}`}
+                    className={`direccion${modal !== "Clientes" ? " invisible" : ""}`}
                     type="text"
                     placeholder="Dirección"
                     value={direccion}
                     onChange={e => setDireccion(e.target.value)}
                 />
                 <input
-                    className={`telefono${!['Clientes','Empresas','Locales','Técnicos'].includes(modal) ? " invisible" : ""}`}
+                    className={`telefono${!['Clientes','Técnicos'].includes(modal) ? " invisible" : ""}`}
                     type="text"
                     placeholder="Teléfono"
                     value={telefono}
                     onChange={e => setTelefono(e.target.value)}
                 />
                 <input
-                    className={`correo${!['Clientes','Empresas','Locales'].includes(modal) ? " invisible" : ""}`}
+                    className={`correo${modal !== "Clientes" ? " invisible" : ""}`}
                     type="email"
                     placeholder="Correo"
                     value={correo}

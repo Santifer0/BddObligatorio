@@ -66,12 +66,6 @@ const Gestion = () => {
                             Usuarios
                         </button>
                     }
-                    <button onClick={() => handleOpenModal("Empresas")}>
-                        Empresas
-                    </button>
-                    <button onClick={() => handleOpenModal("Locales")}>
-                        Locales
-                    </button>
                     <button onClick={() => handleOpenModal("Insumos")}>
                         Insumos
                     </button>
@@ -85,13 +79,11 @@ const Gestion = () => {
             </div>
             {modal && (
                 <div className="modal-content">
-
                     <h3>{modal}</h3>
                     <button onClick={() => navigate("/Alta", { state: { userName, Permiso, userPassword, modal } })}>Alta</button>
                     <button onClick={() => navigate("/Modificacion", { state: { userName, Permiso, userPassword, modal } })}>Modificacion</button>
                     <button onClick={() => navigate("/Baja", { state: { userName, Permiso, userPassword, modal } })}>Baja</button>
                     <button className="cerrar" onClick={handleCloseModal}>Cerrar</button>
-
                 </div>
             )}
         </div>

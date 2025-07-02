@@ -3,13 +3,19 @@ from flask_cors import CORS
 from flask_session import Session
 from modelos.login import loggin
 from modelos.insumo import obtener_Insumos, agregar_insumo, eliminar_insumo, modificar_insumo
+from modelos.clientes import obtener_clientes, agregar_cliente, eliminar_cliente, modificar_cliente
+from modelos.proveedores import obtener_proveedores, agregar_proveedor, eliminar_proveedor, modificar_proveedor
+from modelos.tecnico import obtener_tecnicos, agregar_tecnico, eliminar_tecnico, modificar_tecnico
 
 
-app = Flask(__name__)  # <- Esta línea crea la app
-CORS(app, supports_credentials=True, origins=["http://localhost:5173", "http://127.0.0.1:5173"])
+app = Flask(__name__)
+CORS(app, supports_credentials=True, origins=["http://localhost:5173", "http://127.0.0.1:5000"])
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SECRET_KEY"] = "tu_clave_secreta"
 Session(app)
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -85,5 +91,35 @@ def modificacion_insumo():
     else:
         return jsonify(resultado), 200
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+@app.route('/api/proveedores/alta', methods=['POST'])
+def alta_proveedor():
+    data = request.json
+    nombre = data['nombre']
+    contacto = data['contacto']
+    resultado = agregar_proveedor(nombre, contacto)
+    if resultado.get("status") == "error":
+        return jsonify(resultado), 400
+    else:
+        return jsonify(resultado), 201
+
+@app.route('/api/proveedores/baja', methods=['DELETE'])
+def baja_proveedor():
+    data = request.json
+    id_proveedor = data['id']
+    resultado = eliminar_proveedor(id_proveedor)
+    if resultado.get("status") == "error":
+        return jsonify(resultado), 400
+    else:
+        return jsonify(resultado), 200
+
+@app.route('/api/proveedores/modificacion', methods=['PUT'])
+def modificacion_proveedor():
+    data = request.json
+    id_proveedor = data['id']
+    nombre = data['nombre']
+    contacto = data['contacto']
+    resultado = modificar_proveedor(id_proveedor, nombre, contacto)
+    if resultado.get("status") == "error":
+        return jsonify(resultado), 400
+    else:
+        return jsonify(resultado), 200

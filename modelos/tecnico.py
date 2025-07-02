@@ -39,14 +39,14 @@ def eliminar_tecnico(ci):
         cursor.close()
         conn.close()
 
-def modificar_tecnico(ci, nombre, apellido, telefono):
+def modificar_tecnico(ci, telefono):
     if login.isLogged() != 2:
         return ["Acceso denegado"]
     conn = get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = "UPDATE Tecnicos SET nombre = %s, apellido = %s, telefono = %s WHERE ci = %s"
-        cursor.execute(sql, (nombre, apellido, telefono, ci))
+        sql = "UPDATE Tecnicos SET telefono = %s WHERE ci = %s"
+        cursor.execute(sql, (telefono, ci))
         conn.commit()
     finally:
         cursor.close()
