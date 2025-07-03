@@ -32,10 +32,15 @@ def eliminar_insumo(id_insumo):
     conn = get_connection(True)
     cursor = conn.cursor()
     try:
+        # Primero actualizar registros de consumo que referencian este insumo
+        sql_update_consumo = "UPDATE Registro_Consumo SET id_insumo = NULL WHERE id_insumo = %s"
+        cursor.execute(sql_update_consumo, (id_insumo,))
+        
+        # Luego eliminar el insumo
         sql = "DELETE FROM insumos WHERE id = %s"
         cursor.execute(sql, (id_insumo,))
         conn.commit()
-        return {"status": "ok"}
+        return {"status": "ok", "message": "Insumo eliminado exitosamente. Referencias actualizadas a NULL."}
     except Exception as e:
         return {"status": "error", "message": str(e)}
     finally:

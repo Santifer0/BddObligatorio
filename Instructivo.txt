@@ -1,0 +1,4 @@
+Instalar todas las dependencias: Flask, flask_cors,Flask_session, mysql-connector-python, Flask-Session, Flask-Cors
+Instalar mysql-connector-python
+.\.venv\Scripts\Activate.ps1 para activar el entorno virtual, luego python api.py para ejecutar el servidor
+moverse a la carpeta frontend/ Obligatoriobasededatos y ejecutar npm install y luego npm run dev para ejecutar el frontend;

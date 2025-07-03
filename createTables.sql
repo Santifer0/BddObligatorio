@@ -14,6 +14,7 @@ CREATE TABLE Proveedores (
     nombre VARCHAR(100) NOT NULL,
     contacto VARCHAR(100)
 );
+GRANT SELECT ON Obligatorio.Proveedores TO 'usuario'@'localhost';
 
 CREATE TABLE Clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,6 +33,7 @@ CREATE TABLE Maquinas (
     costo_alquiler DECIMAL(10,2),
     FOREIGN KEY (idCliente) REFERENCES Clientes(id)
 );
+GRANT SELECT ON Obligatorio.Maquinas TO 'usuario'@'localhost';
 
 CREATE TABLE Insumos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -59,6 +61,7 @@ CREATE TABLE Tecnicos (
     apellido VARCHAR(50) NOT NULL,
     telefono VARCHAR(20)
 );
+GRANT SELECT ON Obligatorio.Tecnicos TO 'usuario'@'localhost';
 
 CREATE TABLE Mantenimientos (
     id INT AUTO_INCREMENT PRIMARY KEY,
