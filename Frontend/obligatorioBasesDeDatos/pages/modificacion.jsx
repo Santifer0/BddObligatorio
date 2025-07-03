@@ -1,20 +1,7 @@
 import React, { useState } from "react";
 import './css/alta.css';
-<<<<<<< HEAD
 import './css/gestion.css';
 import './css/modificacion.css';
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-import './css/gestion.css';
-import './css/modificacion.css';
-=======
->>>>>>> origin/main
-=======
-import './css/gestion.css';
-import './css/modificacion.css';
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
 import fondoLogin from '../src/assets/fondo-login.jpg';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -50,7 +37,6 @@ const Modificacion = () => {
     const [contrasenia, setContrasenia] = useState("");
     const [id_insumo, setIdInsumo] = useState("");
     const [cantidad, setCantidad] = useState("");
-<<<<<<< HEAD
     const [permisos, setPermisos] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [listData, setListData] = useState([]);
@@ -58,42 +44,10 @@ const Modificacion = () => {
 
     const Confirmar= async () => {
         // Usar la sesión establecida en el login
-=======
-
-    const verifyLogin = async () => {
-        try {
-            const response = await fetch("http://127.0.0.1:5000/api/verify-login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({ nombre: userName, contrasenia: userPassword }),
-            });
-
-            const data = await response.json();
-            return response.ok && data.status === "ok";
-        } catch (error) {
-            console.error("Error al verificar login:", error);
-            return false;
-        }
-    };
-
-    const Confirmar= async () => {
-        // Verificar login antes de proceder
-        const loginValid = await verifyLogin();
-        if (!loginValid) {
-            alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
-            navigate("/");
-            return;
-        }
-
->>>>>>> origin/main
         let endpoint = "";
         let body = {};
 
         if (modal === "Insumos") {
-<<<<<<< HEAD
             endpoint = "http://localhost:5000/api/insumos/modificacion";
             body = { id, nombre, precio, idProveedor };
         } else if (modal === "Técnicos") {
@@ -123,13 +77,6 @@ const Modificacion = () => {
         } else if (modal === "Registro_Consumo") {
             endpoint = "http://localhost:5000/api/registro_consumo/modificacion";
             body = { id, id_maquina, id_insumo, fecha, cantidad };
-=======
-            endpoint = "http://127.0.0.1:5000/api/insumos/modificacion";
-            body = { id, nombre, precio, idProveedor };
-        } else if (modal === "Técnicos") {
-            endpoint = "http://127.0.0.1:5000/api/tecnicos/modificacion";
-            body = { ci, nombre, apellido, telefono };
->>>>>>> origin/main
         }
 
         try {
@@ -160,13 +107,6 @@ const Modificacion = () => {
         navigate("/Gestion", { state: { userName, Permiso, userPassword } });
     };
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
     const obtenerLista = async () => {
         setLoading(true);
         setShowModal(true);
@@ -245,14 +185,6 @@ const Modificacion = () => {
         setShowModal(false);
     };
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> origin/main
-=======
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
     return (
         <div
             className="modal-background"
@@ -285,11 +217,7 @@ const Modificacion = () => {
                     onChange={e => setCi(e.target.value)}
                 />
                 <input
-<<<<<<< HEAD
                     className={`nombre${!['Insumos','Clientes','Proveedores','Usuarios'].includes(modal) ? " invisible" : ""}`}
-=======
-                    className={`nombre${!['Insumos','Clientes','Empresas','Locales','Proveedores','Usuarios'].includes(modal) ? " invisible" : ""}`}
->>>>>>> origin/main
                     type="text"
                     placeholder="Nombre"
                     value={nombre}
@@ -310,33 +238,21 @@ const Modificacion = () => {
                     onChange={e => setIdProveedor(e.target.value)}
                 />
                 <input
-<<<<<<< HEAD
                     className={`direccion${modal !== "Clientes" ? " invisible" : ""}`}
-=======
-                    className={`direccion${!['Clientes','Locales'].includes(modal) ? " invisible" : ""}`}
->>>>>>> origin/main
                     type="text"
                     placeholder="Dirección"
                     value={direccion}
                     onChange={e => setDireccion(e.target.value)}
                 />
                 <input
-<<<<<<< HEAD
                     className={`telefono${!['Clientes','Técnicos'].includes(modal) ? " invisible" : ""}`}
-=======
-                    className={`telefono${!['Clientes','Empresas','Locales','Técnicos'].includes(modal) ? " invisible" : ""}`}
->>>>>>> origin/main
                     type="text"
                     placeholder="Teléfono"
                     value={telefono}
                     onChange={e => setTelefono(e.target.value)}
                 />
                 <input
-<<<<<<< HEAD
                     className={`correo${modal !== "Clientes" ? " invisible" : ""}`}
-=======
-                    className={`correo${!['Clientes','Empresas','Locales'].includes(modal) ? " invisible" : ""}`}
->>>>>>> origin/main
                     type="email"
                     placeholder="Correo"
                     value={correo}
@@ -440,7 +356,6 @@ const Modificacion = () => {
                     value={cantidad}
                     onChange={e => setCantidad(e.target.value)}
                 />
-<<<<<<< HEAD
                 <input
                     className={`permisos${modal !== "Usuarios" ? " invisible" : ""}`}
                     type="text"
@@ -452,15 +367,6 @@ const Modificacion = () => {
                 <button type="button" onClick={obtenerLista}>
                     Ver Lista de {modal}
                 </button>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-                <br />
->>>>>>> origin/main
-=======
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
                 <button type="button" onClick={Confirmar}>
                     Confirmar Modificacion
                 </button>
@@ -468,13 +374,6 @@ const Modificacion = () => {
                     Volver a Gestión
                 </button>
             </div>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
 
             {/* Modal de lista */}
             {showModal && (
@@ -548,20 +447,8 @@ const Modificacion = () => {
                     )}
                 </div>
             )}
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> origin/main
-=======
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
         </div>
     );
 };
 
-<<<<<<< HEAD
 export default Modificacion;
-=======
-export default Modificacion;
->>>>>>> origin/main

@@ -1,8 +1,7 @@
-import dataBase
-import modelos.login as login
+from dataBase import get_connection
 
-def obtener_mantenimientos():
-    conn = get_connection()
+def obtener_mantenimientos(permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("""
@@ -13,11 +12,11 @@ def obtener_mantenimientos():
         """)
         return cursor.fetchall()
     finally:
-        cursor.close()
-        conn.close()
+            cursor.close()
+            conn.close()
 
-def agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones):
-    conn = get_connection()
+def agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones, permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor()
     try:
         # Verificar si el técnico tiene mantenimientos recientes (menos de 30 minutos)
@@ -44,8 +43,8 @@ def agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones):
         cursor.close()
         conn.close()
 
-def eliminar_mantenimiento(id_mantenimiento):
-    conn = get_connection()
+def eliminar_mantenimiento(id_mantenimiento, permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor()
     try:
         sql = "DELETE FROM mantenimientos WHERE id = %s"
@@ -55,8 +54,8 @@ def eliminar_mantenimiento(id_mantenimiento):
         cursor.close()
         conn.close()
 
-def modificar_mantenimiento(id, id_maquina, ci_tecnico, tipo, fecha, observaciones):
-    conn = get_connection()
+def modificar_mantenimiento(id, id_maquina, ci_tecnico, tipo, fecha, observaciones, permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor()
     try:
         # Verificar si el técnico tiene otros mantenimientos recientes (menos de 30 minutos)
@@ -80,28 +79,8 @@ def modificar_mantenimiento(id, id_maquina, ci_tecnico, tipo, fecha, observacion
             SET id_maquina = %s, ci_tecnico = %s, tipo = %s, fecha = %s, observaciones = %s
             WHERE id = %s
         """
-        cursor.execute(sql, (id_maquina, ci_tecnico, tipo, fecha, observaciones, id_mantenimiento))
+        cursor.execute(sql, (id_maquina, ci_tecnico, tipo, fecha, observaciones, id))
         conn.commit()
-    finally:
-        cursor.close()
-        conn.close()
-
-def tecnico_ocupado(ci_tecnico, fecha):
-    if login.isLogged() == -1:
-        return ["No loggeado"]
-    conn = dataBase.get_connection(False)
-    cursor = conn.cursor()
-    try:
-        sql = """
-            SELECT COUNT(*) FROM Mantenimientos
-            WHERE ci_tecnico = %s AND fecha = %s
-        """
-        cursor.execute(sql, (ci_tecnico, fecha))
-        count = cursor.fetchall()
-        if count[0] != 0:
-            return True
-        else:
-            return False
     finally:
         cursor.close()
         conn.close()

@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from flask_session import Session
-<<<<<<< HEAD
 from datetime import timedelta
 from modelos.login import loggin
 from modelos.insumo import obtener_Insumos, agregar_insumo, eliminar_insumo, modificar_insumo
@@ -28,44 +27,21 @@ Session(app)
 def login():
     if request.method == 'OPTIONS':
         return '', 204
-=======
-from modelos.login import loggin
-from modelos.insumo import obtener_Insumos, agregar_insumo, eliminar_insumo, modificar_insumo
-
-
-app = Flask(__name__)  # <- Esta línea crea la app
-CORS(app, supports_credentials=True, origins=["http://localhost:5173", "http://127.0.0.1:5173"])
-app.config["SESSION_TYPE"] = "filesystem"
-app.config["SECRET_KEY"] = "tu_clave_secreta"
-Session(app)
-
-@app.route('/api/login', methods=['POST'])
-def login():
->>>>>>> origin/main
     data = request.json
     usuario = data['nombre']
     contrasenia = data['contrasenia']
     resultado = loggin(usuario, contrasenia)
-<<<<<<< HEAD
     if resultado == "admin":
         session['user'] = usuario
         session['role'] = "admin"
         session.permanent = True 
         print('LOGIN: role set to', session['role'])
-=======
-    if resultado  == "admin":
-        session['user'] = usuario
-        session['role'] = "admin"
->>>>>>> origin/main
         return jsonify({"status": "ok", "Permiso": True, "userName": usuario})
     elif resultado == "user":
         session['user'] = usuario
         session['role'] = "user"
-<<<<<<< HEAD
         session.permanent = True
         print('LOGIN: role set to', session['role'])
-=======
->>>>>>> origin/main
         return jsonify({"status": "ok", "Permiso": False, "userName": usuario})
     else:
         return jsonify({"status": "error"}), 401
@@ -127,7 +103,6 @@ def modificacion_insumo():
     else:
         return jsonify(resultado), 200
 
-<<<<<<< HEAD
 @app.route('/api/proveedores/alta', methods=['POST', 'OPTIONS'])
 def alta_proveedor():
     if request.method == 'OPTIONS':
@@ -660,7 +635,3 @@ def reporte_total_cobrar_cliente():
 
 if __name__ == "__main__":
     app.run(debug=True, host='localhost', port=5000)
-=======
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
->>>>>>> origin/main

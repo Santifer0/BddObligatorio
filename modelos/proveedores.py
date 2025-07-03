@@ -1,8 +1,9 @@
-import dataBase
-import modelos.login as login
+from dataBase import get_connection
+
+privilegiosAdmin = True
 
 def obtener_proveedores():
-    conn = get_connection()
+    conn = get_connection("admin")  # Solo admin puede ver proveedores
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("SELECT * FROM Proveedores")
@@ -11,8 +12,8 @@ def obtener_proveedores():
         cursor.close()
         conn.close()
 
-def agregar_proveedor(nombre, contacto):
-    conn = get_connection()
+def agregar_proveedor(nombre, contacto, Permiso):
+    conn = get_connection(Permiso)
     cursor = conn.cursor()
     try:
         sql = """
@@ -21,12 +22,15 @@ def agregar_proveedor(nombre, contacto):
         """
         cursor.execute(sql, (nombre, contacto))
         conn.commit()
+        return {"status": "ok", "message": "Proveedor agregado exitosamente"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
     finally:
         cursor.close()
         conn.close()
 
-def eliminar_proveedor(id_proveedor):
-    conn = get_connection()
+def eliminar_proveedor(id_proveedor, Permiso):
+    conn = get_connection(Permiso)
     cursor = conn.cursor()
     try:
         # Primero actualizar insumos que referencian este proveedor
@@ -37,21 +41,15 @@ def eliminar_proveedor(id_proveedor):
         sql = "DELETE FROM Proveedores WHERE id = %s"
         cursor.execute(sql, (id_proveedor,))
         conn.commit()
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
         return {"status": "ok", "message": "Proveedor eliminado exitosamente. Referencias actualizadas a NULL."}
     except Exception as e:
         return {"status": "error", "message": str(e)}
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
     finally:
         cursor.close()
         conn.close()
 
-def modificar_proveedor(id_proveedor, nombre, contacto):
-    conn = get_connection()
+def modificar_proveedor(id_proveedor, nombre, contacto, Permiso):
+    conn = get_connection(Permiso)
     cursor = conn.cursor()
     try:
         sql = """
@@ -61,6 +59,9 @@ def modificar_proveedor(id_proveedor, nombre, contacto):
         """
         cursor.execute(sql, (nombre, contacto, id_proveedor))
         conn.commit()
+        return {"status": "ok", "message": "Proveedor modificado exitosamente"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
     finally:
         cursor.close()
         conn.close()

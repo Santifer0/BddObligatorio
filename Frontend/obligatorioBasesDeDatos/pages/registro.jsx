@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import React, { useState } from "react";
 import './css/registro.css';
 import fondoLogin from '../src/assets/fondo-login.jpg';
@@ -178,4 +176,3 @@ function Registro() {
 };
 
 export default Registro;
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd

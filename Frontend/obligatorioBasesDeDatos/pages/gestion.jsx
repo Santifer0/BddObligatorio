@@ -66,15 +66,6 @@ const Gestion = () => {
                             Usuarios
                         </button>
                     }
-<<<<<<< HEAD
-=======
-                    <button onClick={() => handleOpenModal("Empresas")}>
-                        Empresas
-                    </button>
-                    <button onClick={() => handleOpenModal("Locales")}>
-                        Locales
-                    </button>
->>>>>>> origin/main
                     <button onClick={() => handleOpenModal("Insumos")}>
                         Insumos
                     </button>
@@ -84,41 +75,18 @@ const Gestion = () => {
                     <button onClick={() => handleOpenModal("Mantenimientos")}>
                         Mantenimientos
                     </button>
-<<<<<<< HEAD
                     <button className="back" onClick={() => navigate("/Home", { state: { userName, Permiso, userPassword } })}>
                         back
                     </button>
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    <button className="back" onClick={() => navigate("/Home", { state: { userName, Permiso, userPassword } })}>
-                        back
-                    </button>
-=======
->>>>>>> origin/main
-=======
-                    <button className="back" onClick={() => navigate("/Home", { state: { userName, Permiso, userPassword } })}>
-                        back
-                    </button>
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
                 </div>
             </div>
             {modal && (
                 <div className="modal-content">
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
                     <h3>{modal}</h3>
                     <button onClick={() => navigate("/Alta", { state: { userName, Permiso, userPassword, modal } })}>Alta</button>
                     <button onClick={() => navigate("/Modificacion", { state: { userName, Permiso, userPassword, modal } })}>Modificacion</button>
                     <button onClick={() => navigate("/Baja", { state: { userName, Permiso, userPassword, modal } })}>Baja</button>
                     <button className="cerrar" onClick={handleCloseModal}>Cerrar</button>
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
                 </div>
             )}
         </div>

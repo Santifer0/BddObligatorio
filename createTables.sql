@@ -25,7 +25,6 @@ CREATE TABLE Clientes (
 );
 GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.Clientes TO 'usuario'@'localhost';
 
-<<<<<<< HEAD
 CREATE TABLE Maquinas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
@@ -34,6 +33,7 @@ CREATE TABLE Maquinas (
     costo_alquiler DECIMAL(10,2),
     FOREIGN KEY (idCliente) REFERENCES Clientes(id)
 );
+GRANT SELECT ON Obligatorio.Maquinas TO 'usuario'@'localhost';
 
 CREATE TABLE Insumos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,20 +44,6 @@ CREATE TABLE Insumos (
 );
 GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.insumos TO 'usuario'@'localhost';
 
-<<<<<<< HEAD
-=======
-CREATE TABLE Maquinas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    modelo VARCHAR(100) NOT NULL,
-    idCliente INT,
-    direccionCliente VARCHAR(150),
-    costo_alquiler DECIMAL(10,2),
-    FOREIGN KEY (idCliente)   REFERENCES Clientes(id)
-);
-
-
-
->>>>>>> origin/main
 CREATE TABLE Registro_Consumo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_maquina INT,
@@ -96,10 +82,6 @@ CREATE TABLE Usuarios (
     contrasenia   CHAR(64) NOT NULL,
     permisos BOOLEAN NOT NULL DEFAULT 0
 );
-INSERT INTO Usuarios (nombre_publico, nombre, contrasenia, permisos) VALUES
-('Administrador', 'administrador', SHA2('passadministrador', 256), TRUE);
-INSERT INTO Usuarios (nombre_publico, nombre, contrasenia, permisos) VALUES
-('Usuario', 'usuario', SHA2('passusuario', 256), FALSE);
 
 
 SHOW GRANTS FOR 'usuario'@'localhost';

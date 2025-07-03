@@ -1,11 +1,11 @@
-import dataBase
+from dataBase import get_connection
 
 def obtener_Insumos ():
-    conn = get_connection()
+    conn = get_connection("admin")  # Necesita admin para hacer JOIN con Proveedores
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT i.id, i.nombre, i.precio, i.idProveedor
+            SELECT i.id, i.nombre, i.precio, i.idProveedor, p.nombre as proveedor_nombre
             FROM Insumos i
             JOIN Proveedores p ON i.idProveedor = p.id
         """)
@@ -14,19 +14,22 @@ def obtener_Insumos ():
         cursor.close()
         conn.close()
 
-def agregar_insumo(nombre, precio, id_proveedor):
-    conn = get_connection()
+def agregar_insumo(nombre, precio, id_proveedor ):
+    conn = get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = "INSERT INTO Insumos (nombre, precio, idProveedor) VALUES (%s, %s, %s)"
+        sql = "INSERT INTO insumos (nombre, precio, idProveedor) VALUES (%s, %s, %s)"
         cursor.execute(sql, (nombre, precio, id_proveedor))
         conn.commit()
+        return {"status": "ok"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
     finally:
         cursor.close()
         conn.close()
 
 def eliminar_insumo(id_insumo):
-    conn = get_connection()
+    conn = get_connection(True)
     cursor = conn.cursor()
     try:
         # Primero actualizar registros de consumo que referencian este insumo
@@ -37,26 +40,28 @@ def eliminar_insumo(id_insumo):
         sql = "DELETE FROM insumos WHERE id = %s"
         cursor.execute(sql, (id_insumo,))
         conn.commit()
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 31646ca485c4072fea4890830ebd812730f4b549
         return {"status": "ok", "message": "Insumo eliminado exitosamente. Referencias actualizadas a NULL."}
     except Exception as e:
         return {"status": "error", "message": str(e)}
->>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
     finally:
         cursor.close()
         conn.close()
 
+    
 def modificar_insumo(id_insumo, nombre, precio, id_proveedor):
-    conn = get_connection()
+    conn = get_connection(True)
     cursor = conn.cursor()
     try:
-        sql = "UPDATE Insumos SET nombre = %s, precio = %s, idProveedor = %s WHERE id = %s"
+        sql = """
+            UPDATE insumos
+            SET nombre = %s, precio = %s, idProveedor = %s
+            WHERE id = %s
+        """
         cursor.execute(sql, (nombre, precio, id_proveedor, id_insumo))
         conn.commit()
+        return {"status": "ok"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
     finally:
         cursor.close()
         conn.close()
@@ -74,7 +79,7 @@ def registrar_consumo(id_maquina, id_insumo, fecha, cantidad):
         conn.close()
 
 def obtener_consumos():
-    conn = get_connection()
+    conn = get_connection(False)
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute("""
