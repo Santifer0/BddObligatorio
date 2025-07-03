@@ -34,66 +34,38 @@ const Alta = () => {
     const [contrasenia, setContrasenia] = useState("");
     const [id_insumo, setIdInsumo] = useState("");
     const [cantidad, setCantidad] = useState("");
-
-    const verifyLogin = async () => {
-        try {
-            const response = await fetch("http://127.0.0.1:5000/api/verify-login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({ nombre: userName, contrasenia: userPassword }),
-            });
-
-            const data = await response.json();
-            return response.ok && data.status === "ok";
-        } catch (error) {
-            console.error("Error al verificar login:", error);
-            return false;
-        }
-    };
+    const [permisos, setPermisos] = useState("");
 
     const Confirmar = async () => {
-        // Verificar login antes de proceder
-        const loginValid = await verifyLogin();
-        if (!loginValid) {
-            alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
-            navigate("/");
-            return;
-        }
+        // Simplificar: no verificar sesión antes de cada request
+        // La sesión ya fue establecida en el login
         let endpoint = "";
         let body = {};
 
         if (modal === "Insumos") {
-            endpoint = "http://127.0.0.1:5000/api/insumos/alta";
+            endpoint = "http://localhost:5000/api/insumos/alta";
             body = { nombre, precio, idProveedor };
         } else if (modal === "Clientes") {
-            endpoint = "http://127.0.0.1:5000/api/clientes/alta";
+            endpoint = "http://localhost:5000/api/clientes/alta";
             body = { nombre, direccion, telefono, correo };
-        } else if (modal === "Empresas") {
-            endpoint = "http://127.0.0.1:5000/api/empresas/alta";
-            body = { nombre, telefono, correo };
-        } else if (modal === "Locales") {
-            endpoint = "http://127.0.0.1:5000/api/locales/alta";
-            body = { nombre, direccion, telefono, correo };
+        
         } else if (modal === "Proveedores") {
-            endpoint = "http://127.0.0.1:5000/api/proveedores/alta";
+            endpoint = "http://localhost:5000/api/proveedores/alta";
             body = { nombre, contacto };
         } else if (modal === "Técnicos") {
-            endpoint = "http://127.0.0.1:5000/api/tecnicos/alta";
+            endpoint = "http://localhost:5000/api/tecnicos/alta";
             body = { ci, nombre, apellido, telefono };
         } else if (modal === "Usuarios") {
-            endpoint = "http://127.0.0.1:5000/api/usuarios/alta";
-            body = { nombre_publico, nombre, contrasenia };
+            endpoint = "http://localhost:5000/api/usuarios/alta";
+            body = { nombre_publico, nombre, contrasenia, permisos: parseInt(permisos) };
         } else if (modal === "Máquinas") {
-            endpoint = "http://127.0.0.1:5000/api/maquinas/alta";
-            body = { modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual };
+            endpoint = "http://localhost:5000/api/maquinas/alta";
+            body = { modelo, idCliente: id_cliente, ubicacionCliente: ubicacion_cliente, costo_alquiler: costo_alquiler_mensual };
         } else if (modal === "Mantenimientos") {
-            endpoint = "http://127.0.0.1:5000/api/mantenimientos/alta";
+            endpoint = "http://localhost:5000/api/mantenimientos/alta";
             body = { id_maquina, ci_tecnico, tipo, fecha, observaciones };
         } else if (modal === "Registro_Consumo") {
-            endpoint = "http://127.0.0.1:5000/api/registro_consumo/alta";
+            endpoint = "http://localhost:5000/api/registro_consumo/alta";
             body = { id_maquina, id_insumo, fecha, cantidad };
         }
 
@@ -103,7 +75,7 @@ const Alta = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                credentials: "include",
+                credentials: "include", // Usar la sesión establecida en login
                 body: JSON.stringify(body),
             });
 
@@ -133,6 +105,8 @@ const Alta = () => {
                 setContrasenia("");
                 setIdInsumo("");
                 setCantidad("");
+                setPermisos("");
+                navigate("/Gestion", { state: { userName, Permiso, userPassword } });
             } else {
                 alert(`Error: ${result.message}`);
             }
@@ -161,6 +135,7 @@ const Alta = () => {
                 zIndex: 1,
             }}
         >
+            
             <div className="modal">
                 <h2>Alta de {modal}</h2>
                 <input
@@ -316,6 +291,13 @@ const Alta = () => {
                     placeholder="Cantidad"
                     value={cantidad}
                     onChange={e => setCantidad(e.target.value)}
+                />
+                <input
+                    className={`permisos${modal !== "Usuarios" ? " invisible" : ""}`}
+                    type="text"
+                    placeholder="Permisos (admin = 1 o user = 0)"
+                    value={permisos}
+                    onChange={e => setPermisos(e.target.value)}
                 />
                 <br />
                 <button type="button" onClick={Confirmar}>

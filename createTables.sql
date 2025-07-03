@@ -14,6 +14,7 @@ CREATE TABLE Proveedores (
     nombre VARCHAR(100) NOT NULL,
     contacto VARCHAR(100)
 );
+GRANT SELECT ON Obligatorio.Proveedores TO 'usuario'@'localhost';
 
 CREATE TABLE Clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,6 +25,15 @@ CREATE TABLE Clientes (
 );
 GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.Clientes TO 'usuario'@'localhost';
 
+CREATE TABLE Maquinas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    modelo VARCHAR(100) NOT NULL,
+    idCliente INT,
+    ubicacionCliente VARCHAR(150),
+    costo_alquiler DECIMAL(10,2),
+    FOREIGN KEY (idCliente) REFERENCES Clientes(id)
+);
+GRANT SELECT ON Obligatorio.Maquinas TO 'usuario'@'localhost';
 
 CREATE TABLE Insumos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,17 +43,6 @@ CREATE TABLE Insumos (
     FOREIGN KEY (idProveedor) REFERENCES Proveedores(id)
 );
 GRANT SELECT, INSERT, UPDATE, DELETE ON Obligatorio.insumos TO 'usuario'@'localhost';
-
-CREATE TABLE Maquinas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    modelo VARCHAR(100) NOT NULL,
-    idCliente INT,
-    direccionCliente VARCHAR(150),
-    costo_alquiler DECIMAL(10,2),
-    FOREIGN KEY (idCliente)   REFERENCES Clientes(id)
-);
-
-
 
 CREATE TABLE Registro_Consumo (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,6 +61,7 @@ CREATE TABLE Tecnicos (
     apellido VARCHAR(50) NOT NULL,
     telefono VARCHAR(20)
 );
+GRANT SELECT ON Obligatorio.Tecnicos TO 'usuario'@'localhost';
 
 CREATE TABLE Mantenimientos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -82,10 +82,6 @@ CREATE TABLE Usuarios (
     contrasenia   CHAR(64) NOT NULL,
     permisos BOOLEAN NOT NULL DEFAULT 0
 );
-INSERT INTO Usuarios (nombre_publico, nombre, contrasenia, permisos) VALUES
-('Administrador', 'administrador', SHA2('passadministrador', 256), TRUE);
-INSERT INTO Usuarios (nombre_publico, nombre, contrasenia, permisos) VALUES
-('Usuario', 'usuario', SHA2('passusuario', 256), FALSE);
 
 
 SHOW GRANTS FOR 'usuario'@'localhost';

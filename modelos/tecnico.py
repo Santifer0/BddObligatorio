@@ -1,52 +1,55 @@
 from dataBase import get_connection
-import modelos.login as login
 
-def obtener_tecnicos():
-    if login.isLogged() != 2:
-        return ["Acceso denegado"]
-    conn = get_connection(True)
+def obtener_tecnicos(permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT * FROM Tecnicos")
+        cursor.execute("""
+            SELECT t.ci, t.nombre, t.apellido, t.telefono
+            FROM tecnicos t
+        """)
         return cursor.fetchall()
     finally:
         cursor.close()
         conn.close()
 
-def agregar_tecnico(ci, nombre, apellido, telefono):
-    if login.isLogged() != 2:
-        return ["Acceso denegado"]
-    conn = get_connection(True)
+def agregar_tecnico(ci, nombre, telefono, permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor()
     try:
-        sql = "INSERT INTO Tecnicos (ci, nombre, apellido, telefono) VALUES (%s, %s, %s, %s)"
-        cursor.execute(sql, (ci, nombre, apellido, telefono))
+        sql = "INSERT INTO tecnicos (ci, nombre, apellido, telefono) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql, (ci, nombre, "", telefono))  # apellido vacío por consistencia
         conn.commit()
     finally:
         cursor.close()
         conn.close()
 
-def eliminar_tecnico(ci):
-    if login.isLogged() != 2:
-        return ["Acceso denegado"]
-    conn = get_connection(True)
+def eliminar_tecnico(ci, permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor()
     try:
-        sql = "DELETE FROM Tecnicos WHERE ci = %s"
+        # Primero actualizar mantenimientos que referencian este técnico
+        sql_update_mantenimientos = "UPDATE Mantenimientos SET ci_tecnico = NULL WHERE ci_tecnico = %s"
+        cursor.execute(sql_update_mantenimientos, (ci,))
+        
+        # Luego eliminar el técnico
+        sql = "DELETE FROM tecnicos WHERE ci = %s"
         cursor.execute(sql, (ci,))
         conn.commit()
     finally:
         cursor.close()
         conn.close()
 
-def modificar_tecnico(ci, nombre, apellido, telefono):
-    if login.isLogged() != 2:
-        return ["Acceso denegado"]
-    conn = get_connection(True)
+def modificar_tecnico(ci, nombre, telefono, permiso):
+    conn = get_connection(permiso)
     cursor = conn.cursor()
     try:
-        sql = "UPDATE Tecnicos SET nombre = %s, apellido = %s, telefono = %s WHERE ci = %s"
-        cursor.execute(sql, (nombre, apellido, telefono, ci))
+        sql = """
+            UPDATE tecnicos
+            SET nombre = %s, telefono = %s
+            WHERE ci = %s
+        """
+        cursor.execute(sql, (nombre, telefono, ci))
         conn.commit()
     finally:
         cursor.close()

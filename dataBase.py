@@ -60,7 +60,7 @@ def crearBase():
             conexion.close()
 
 def get_connection(privilegiosAdmin):
-    if privilegiosAdmin == True:
+    if privilegiosAdmin == True or privilegiosAdmin == "admin":
         return connectAdmin()
     else:
         return connectUsuario()
