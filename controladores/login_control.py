@@ -1,5 +1,6 @@
 from dataBase import get_connection
 
+
 def verificar_login(correo, contraseña):
     conn = get_connection()
     cursor = conn.cursor()

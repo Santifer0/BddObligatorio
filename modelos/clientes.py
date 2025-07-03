@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 from dataBase import get_connection
 
 def obtener_clientes():
@@ -47,3 +49,4 @@ def modificar_cliente(id_cliente, nombre, direccion, telefono, correo):
     finally:
         cursor.close()
         conn.close()
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd

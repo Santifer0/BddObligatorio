@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import React, { useState } from "react";
 import './css/alta.css';
 import './css/gestion.css';
@@ -264,3 +266,4 @@ const Baja = () => {
 };
 
 export default Baja;
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
