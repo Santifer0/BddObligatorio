@@ -25,8 +25,13 @@ def eliminar_cliente(id_cliente):
     conn = get_connection(False)
     cursor = conn.cursor()
     try:
+        # Primero actualizar máquinas que referencian este cliente
+        sql_update_maquinas = "UPDATE Maquinas SET idCliente = NULL WHERE idCliente = %s"
+        cursor.execute(sql_update_maquinas, (id_cliente,))
+        
+        # Luego eliminar el cliente
         sql = "DELETE FROM Clientes WHERE id = %s"
-        cursor.execute(sql, (id_cliente ,))
+        cursor.execute(sql, (id_cliente,))
         conn.commit()
     finally:
         cursor.close()

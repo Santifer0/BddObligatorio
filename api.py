@@ -10,6 +10,7 @@ from modelos.proveedores import obtener_proveedores, agregar_proveedor, eliminar
 from modelos.tecnico import obtener_tecnicos, agregar_tecnico, eliminar_tecnico, modificar_tecnico
 from modelos.usuario import obtener_usuarios, agregar_usuario, eliminar_usuario, modificar_usuario
 from modelos.maquina import obtener_maquinas, agregar_maquina, eliminar_maquina, modificar_maquina
+from modelos.registros import consumo_insumos, total_cobrar_cliente, mantenimientos_por_tecnico, maquinas_por_cliente, alquiler_mensual_cliente
 
 
 app = Flask(__name__)
@@ -33,7 +34,7 @@ def login():
     if resultado == "admin":
         session['user'] = usuario
         session['role'] = "admin"
-        session.permanent = True  # Asegura que la sesión sea permanente
+        session.permanent = True 
         print('LOGIN: role set to', session['role'])
         return jsonify({"status": "ok", "Permiso": True, "userName": usuario})
     elif resultado == "user":
@@ -284,8 +285,12 @@ def alta_mantenimiento():
     tipo = data['tipo']
     fecha = data['fecha']
     observaciones = data['observaciones']
-    agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones, permiso)
-    return jsonify({"status": "ok"}), 201
+    
+    try:
+        agregar_mantenimiento(id_maquina, ci_tecnico, tipo, fecha, observaciones, permiso)
+        return jsonify({"status": "ok"}), 201
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/mantenimientos/baja', methods=['DELETE'])
 def baja_mantenimiento():
@@ -317,8 +322,12 @@ def modificacion_mantenimiento():
     tipo = data['tipo']
     fecha = data['fecha']
     observaciones = data['observaciones']
-    modificar_mantenimiento(id_mantenimiento, id_maquina, ci_tecnico, tipo, fecha, observaciones, permiso)
-    return jsonify({"status": "ok"}), 200
+    
+    try:
+        modificar_mantenimiento(id_mantenimiento, id_maquina, ci_tecnico, tipo, fecha, observaciones, permiso)
+        return jsonify({"status": "ok"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @app.route('/api/tecnicos', methods=['GET', 'OPTIONS'])
 def get_tecnicos():
@@ -503,9 +512,9 @@ def alta_maquina():
     
     data = request.json
     modelo = data['modelo']
-    id_cliente = data['id_cliente']
-    ubicacion = data['ubicacion']
-    costo = data['costo']
+    id_cliente = data['idCliente']
+    ubicacion = data['ubicacionCliente']
+    costo = data['costo_alquiler']
     agregar_maquina(modelo, id_cliente, ubicacion, costo, permiso)
     return jsonify({"status": "ok"}), 201
 
@@ -546,6 +555,83 @@ def modificacion_maquina():
     costo = data['costo']
     modificar_maquina(id_maquina, modelo, id_cliente, ubicacion, costo, permiso)
     return jsonify({"status": "ok"}), 200
+
+
+@app.route('/api/registro/alquiler', methods=['GET', 'OPTIONS'])
+def registro_alquiler():
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    print('SESSION en registro_alquiler:', dict(session))
+    permiso = session.get('role')
+    print('PERMISO obtenido de sesión:', permiso)
+    
+    if permiso != "admin":
+        return jsonify({"status": "error", "message": "Permiso denegado. Se requiere permisos de administrador."}), 403
+
+    data = alquiler_mensual_cliente()
+    return jsonify(data), 200
+
+@app.route('/api/registro/mantenimientos-tecnico', methods=['GET', 'OPTIONS'])
+def registro_mantenimientos_tecnico():
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    print('SESSION en registro_mantenimientos_tecnico:', dict(session))
+    permiso = session.get('role')
+    print('PERMISO obtenido de sesión:', permiso)
+    
+    if permiso != "admin":
+        return jsonify({"status": "error", "message": "Permiso denegado. Se requiere permisos de administrador."}), 403
+
+    data = mantenimientos_por_tecnico()
+    return jsonify(data), 200
+
+@app.route('/api/registro/maquinas-cliente', methods=['GET', 'OPTIONS'])
+def registro_maquinas_cliente():
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    print('SESSION en registro_maquinas_cliente:', dict(session))
+    permiso = session.get('role')
+    print('PERMISO obtenido de sesión:', permiso)
+    
+    if permiso != "admin":
+        return jsonify({"status": "error", "message": "Permiso denegado. Se requiere permisos de administrador."}), 403
+
+    data = maquinas_por_cliente()
+    return jsonify(data), 200
+
+@app.route('/api/registro/consumo', methods=['POST', 'OPTIONS'])
+def registro_consumo():
+    if request.method == 'OPTIONS':
+        return '', 204
+
+    data = request.json
+    id_maquina = data['id_maquina']
+    id_insumo = data['id_insumo']
+    cantidad = data['cantidad']
+    fecha = data['fecha']
+    resultado = consumo_insumos(id_maquina, id_insumo, fecha, cantidad)
+    if resultado["status"] == "ok":
+        return jsonify(resultado), 201
+    else:
+        return jsonify(resultado), 400
+
+@app.route('/api/registro/consumo/reporte', methods=['GET', 'OPTIONS'])
+def reporte_total_cobrar_cliente():
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    print('SESSION en reporte_total_cobrar_cliente:', dict(session))
+    permiso = session.get('role')
+    print('PERMISO obtenido de sesión:', permiso)
+    
+    if permiso != "admin":
+        return jsonify({"status": "error", "message": "Permiso denegado. Se requiere permisos de administrador."}), 403
+    
+    data = total_cobrar_cliente()
+    return jsonify(data), 200
 
 if __name__ == "__main__":
     app.run(debug=True, host='localhost', port=5000)

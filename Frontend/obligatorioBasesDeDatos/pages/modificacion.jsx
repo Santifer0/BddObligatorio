@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import './css/alta.css';
+import './css/gestion.css';
+import './css/modificacion.css';
 import fondoLogin from '../src/assets/fondo-login.jpg';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -36,6 +38,9 @@ const Modificacion = () => {
     const [id_insumo, setIdInsumo] = useState("");
     const [cantidad, setCantidad] = useState("");
     const [permisos, setPermisos] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [listData, setListData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const Confirmar= async () => {
         // Usar la sesión establecida en el login
@@ -100,6 +105,84 @@ const Modificacion = () => {
 
     const volverAGestion = () => {
         navigate("/Gestion", { state: { userName, Permiso, userPassword } });
+    };
+
+    const obtenerLista = async () => {
+        setLoading(true);
+        setShowModal(true);
+        
+        try {
+            let endpoint = "";
+            
+            if (modal === "Insumos") {
+                endpoint = "http://localhost:5000/api/insumos";
+            } else if (modal === "Técnicos") {
+                endpoint = "http://localhost:5000/api/tecnicos";
+            } else if (modal === "Clientes") {
+                endpoint = "http://localhost:5000/api/clientes";
+            } else if (modal === "Proveedores") {
+                endpoint = "http://localhost:5000/api/proveedores";
+            } else if (modal === "Usuarios") {
+                endpoint = "http://localhost:5000/api/usuarios";
+            } else if (modal === "Máquinas") {
+                endpoint = "http://localhost:5000/api/maquinas";
+            } else if (modal === "Mantenimientos") {
+                endpoint = "http://localhost:5000/api/mantenimientos";
+            }
+
+            const response = await fetch(endpoint, {
+                method: "GET",
+                credentials: "include"
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setListData(data);
+            } else {
+                alert("Error al obtener la lista");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error al conectar con el servidor");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const seleccionarElemento = (elemento) => {
+        if (modal === "Técnicos") {
+            setCi(elemento.ci || elemento.CI);
+            setTelefono(elemento.telefono || "");
+        } else {
+            setId(elemento.id || elemento.ID);
+            if (modal === "Insumos") {
+                setNombre(elemento.nombre || "");
+                setPrecio(elemento.precio || "");
+                setIdProveedor(elemento.idProveedor || "");
+            } else if (modal === "Clientes") {
+                setNombre(elemento.nombre || "");
+                setDireccion(elemento.direccion || "");
+                setTelefono(elemento.telefono || "");
+                setCorreo(elemento.correo || "");
+            } else if (modal === "Proveedores") {
+                setNombre(elemento.nombre || "");
+                setContacto(elemento.contacto || "");
+            } else if (modal === "Usuarios") {
+                setNombrePublico(elemento.nombre_publico || "");
+                setNombre(elemento.nombre || "");
+                setPermisos(elemento.permisos || "");
+            } else if (modal === "Máquinas") {
+                setModelo(elemento.modelo || "");
+                setIdCliente(elemento.idCliente || "");
+                setUbicacionCliente(elemento.ubicacionCliente || "");
+                setCostoAlquilerMensual(elemento.costo_alquiler || "");
+            }
+        }
+        setShowModal(false);
+    };
+
+    const cerrarModal = () => {
+        setShowModal(false);
     };
 
     return (
@@ -281,6 +364,9 @@ const Modificacion = () => {
                     onChange={e => setPermisos(e.target.value)}
                 />
                 <br />
+                <button type="button" onClick={obtenerLista}>
+                    Ver Lista de {modal}
+                </button>
                 <button type="button" onClick={Confirmar}>
                     Confirmar Modificacion
                 </button>
@@ -288,6 +374,79 @@ const Modificacion = () => {
                     Volver a Gestión
                 </button>
             </div>
+
+            {/* Modal de lista */}
+            {showModal && (
+                <div className="modal-content">
+                    <h3>Lista de {modal}</h3>
+                    {loading ? (
+                        <p>Cargando...</p>
+                    ) : (
+                        <div>
+                            {listData.length === 0 ? (
+                                <p>No hay elementos disponibles</p>
+                            ) : (
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <thead>
+                                        <tr style={{ borderBottom: '2px solid #ccc' }}>
+                                            <th style={{ padding: '10px', textAlign: 'left' }}>
+                                                {modal === "Técnicos" ? "CI" : "ID"}
+                                            </th>
+                                            <th style={{ padding: '10px', textAlign: 'left' }}>Nombre</th>
+                                            <th style={{ padding: '10px', textAlign: 'left' }}>Datos</th>
+                                            <th style={{ padding: '10px', textAlign: 'left' }}>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {listData.map((elemento, index) => (
+                                            <tr key={index} style={{ borderBottom: '1px solid #eee' }}>
+                                                <td style={{ padding: '8px' }}>
+                                                    {modal === "Técnicos" ? (elemento.ci || elemento.CI) : (elemento.id || elemento.ID)}
+                                                </td>
+                                                <td style={{ padding: '8px' }}>
+                                                    {elemento.nombre || elemento.Nombre || elemento.modelo || elemento.nombre_publico || "N/A"}
+                                                </td>
+                                                <td style={{ padding: '8px' }}>
+                                                    {modal === "Insumos" && `$${elemento.precio}`}
+                                                    {modal === "Clientes" && elemento.telefono}
+                                                    {modal === "Técnicos" && elemento.apellido}
+                                                    {modal === "Proveedores" && elemento.contacto}
+                                                    {modal === "Usuarios" && (elemento.permisos === 1 ? "Admin" : "User")}
+                                                    {modal === "Máquinas" && elemento.ubicacionCliente}
+                                                    {modal === "Mantenimientos" && elemento.tipo}
+                                                </td>
+                                                <td style={{ padding: '8px' }}>
+                                                    <button 
+                                                        onClick={() => seleccionarElemento(elemento)}
+                                                        style={{
+                                                            backgroundColor: '#007bff',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            padding: '5px 10px',
+                                                            borderRadius: '3px',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        Seleccionar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                                <button 
+                                    className="cerrar"
+                                    onClick={cerrarModal}
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

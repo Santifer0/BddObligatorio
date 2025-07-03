@@ -28,6 +28,11 @@ def eliminar_tecnico(ci, permiso):
     conn = get_connection(permiso)
     cursor = conn.cursor()
     try:
+        # Primero actualizar mantenimientos que referencian este técnico
+        sql_update_mantenimientos = "UPDATE Mantenimientos SET ci_tecnico = NULL WHERE ci_tecnico = %s"
+        cursor.execute(sql_update_mantenimientos, (ci,))
+        
+        # Luego eliminar el técnico
         sql = "DELETE FROM tecnicos WHERE ci = %s"
         cursor.execute(sql, (ci,))
         conn.commit()
