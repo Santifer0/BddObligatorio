@@ -57,10 +57,10 @@ const Alta = () => {
             body = { ci, nombre, apellido, telefono };
         } else if (modal === "Usuarios") {
             endpoint = "http://localhost:5000/api/usuarios/alta";
-            body = { nombre_publico, nombre, contrasenia, permisos };
+            body = { nombre_publico, nombre, contrasenia, permisos: parseInt(permisos) };
         } else if (modal === "Máquinas") {
             endpoint = "http://localhost:5000/api/maquinas/alta";
-            body = { modelo, id_cliente, ubicacion_cliente, costo_alquiler_mensual };
+            body = { modelo, idCliente: id_cliente, ubicacionCliente: ubicacion_cliente, costo_alquiler: costo_alquiler_mensual };
         } else if (modal === "Mantenimientos") {
             endpoint = "http://localhost:5000/api/mantenimientos/alta";
             body = { id_maquina, ci_tecnico, tipo, fecha, observaciones };
@@ -137,8 +137,6 @@ const Alta = () => {
         >
             
             <div className="modal">
-                <h2>{Permiso && "true"}</h2>
-                <h2>{!Permiso && "false"}</h2>
                 <h2>Alta de {modal}</h2>
                 <input
                     className={`ci${modal !== "Técnicos" ? " invisible" : ""}`}

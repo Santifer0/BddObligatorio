@@ -75,6 +75,9 @@ const Gestion = () => {
                     <button onClick={() => handleOpenModal("Mantenimientos")}>
                         Mantenimientos
                     </button>
+                    <button className="back" onClick={() => navigate("/Home", { state: { userName, Permiso, userPassword } })}>
+                        back
+                    </button>
                 </div>
             </div>
             {modal && (
