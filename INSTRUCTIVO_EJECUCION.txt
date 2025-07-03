@@ -1,0 +1,28 @@
+
+ Requisitos Previos
+
+- Python 3.9 o superior
+- Node.js 16 o superior
+- MySQL instalado y configurado
+- Visual Studio Code o cualquier otro editor de código
+
+
+ Asegúrese de tener MySQL instalado y funcionando en su máquina
+ El usuario root debe tener la contraseña "root" (o modifique `dataBase.py` si desea usar otras credenciales)
+
+ Configuración del Backend (Flask)
+   python -m venv .venv
+    .\.venv\Scripts\Activate.ps1
+   pip install Flask flask-cors Flask-Session mysql-connector-python
+   python api.py
+   
+
+   Navegue a la carpeta del frontend:
+
+   cd BddObligatorio\Frontend\obligatorioBasesDeDatos
+   npm install
+   npm run dev
+   
+   
+   admin 
+   miContrasenia
