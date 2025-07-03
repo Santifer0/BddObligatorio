@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import './css/alta.css';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import './css/gestion.css';
 import './css/modificacion.css';
 =======
 >>>>>>> origin/main
+=======
+import './css/gestion.css';
+import './css/modificacion.css';
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
 import fondoLogin from '../src/assets/fondo-login.jpg';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -151,6 +156,9 @@ const Modificacion = () => {
     };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
     const obtenerLista = async () => {
         setLoading(true);
         setShowModal(true);
@@ -229,8 +237,11 @@ const Modificacion = () => {
         setShowModal(false);
     };
 
+<<<<<<< HEAD
 =======
 >>>>>>> origin/main
+=======
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
     return (
         <div
             className="modal-background"
@@ -430,9 +441,12 @@ const Modificacion = () => {
                 <button type="button" onClick={obtenerLista}>
                     Ver Lista de {modal}
                 </button>
+<<<<<<< HEAD
 =======
                 <br />
 >>>>>>> origin/main
+=======
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
                 <button type="button" onClick={Confirmar}>
                     Confirmar Modificacion
                 </button>
@@ -441,6 +455,9 @@ const Modificacion = () => {
                 </button>
             </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
 
             {/* Modal de lista */}
             {showModal && (
@@ -514,8 +531,11 @@ const Modificacion = () => {
                     )}
                 </div>
             )}
+<<<<<<< HEAD
 =======
 >>>>>>> origin/main
+=======
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
         </div>
     );
 };

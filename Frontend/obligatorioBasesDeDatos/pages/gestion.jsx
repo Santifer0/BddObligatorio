@@ -85,11 +85,17 @@ const Gestion = () => {
                         Mantenimientos
                     </button>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <button className="back" onClick={() => navigate("/Home", { state: { userName, Permiso, userPassword } })}>
                         back
                     </button>
 =======
 >>>>>>> origin/main
+=======
+                    <button className="back" onClick={() => navigate("/Home", { state: { userName, Permiso, userPassword } })}>
+                        back
+                    </button>
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
                 </div>
             </div>
             {modal && (

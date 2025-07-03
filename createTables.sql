@@ -35,8 +35,11 @@ CREATE TABLE Maquinas (
     FOREIGN KEY (idCliente) REFERENCES Clientes(id)
 );
 GRANT SELECT ON Obligatorio.Maquinas TO 'usuario'@'localhost';
+<<<<<<< HEAD
 =======
 >>>>>>> origin/main
+=======
+>>>>>>> 27b333fd7684ad9edb2c1c713af5bcf51a3ed8dd
 
 CREATE TABLE Insumos (
     id INT AUTO_INCREMENT PRIMARY KEY,
